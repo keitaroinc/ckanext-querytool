@@ -1,18 +1,18 @@
 {% set active_filters = active_filters.split(',') %}
 
 <div id="filter_item_{{ n }}" class="filter_item">
-    <ul class="inline text-right pull-right filter-actions">
+    <ul class="list-inline text-right pull-right filter-actions">
       <li>
-        <a class="btn remove-filter-item-btn">
+        <a class="btn btn-default remove-filter-item-btn">
           <span class="fa fa-trash-o" aria-hidden="true"></span> {{ _('Delete') }}
         </a>
       </li>
     </ul>
 
-    <div class="control-group control-select">
+    <div class="form-group control-select">
       <label class="control-label" for="data_filter_name_{{ n }}">{{ _('Dimension') }}</label>
       <div class="controls ">
-        <select id="data_filter_name_{{ n }}" name="data_filter_name_{{ n }}" required=required>
+        <select id="data_filter_name_{{ n }}" name="data_filter_name_{{ n }}" class="form-control" required=required>
             <option value="">&mdash; {{ _('Select column') }} &mdash;</option>
           {% for filter in active_filters %}
             <option value="{{ filter }}" {% if selected_filter %}{{ 'selected' if filter == selected_filter.name }}{% endif %}>{{ filter }}</option>
@@ -21,10 +21,10 @@
       </div>
     </div>
 
-    <div class="control-group control-select data_filter_value_{{ n }} {{ class }}">
+    <div class="form-group control-select data_filter_value_{{ n }} {{ class }}">
       <label class="control-label" for="data_filter_value_{{ n }}">{{ _('Default Value') }}</label>
       <div class="controls ">
-        <select id="data_filter_value_{{ n }}" name="data_filter_value_{{ n }}" required=required>
+        <select id="data_filter_value_{{ n }}" name="data_filter_value_{{ n }}" class="form-control" required=required>
           <option value="">&mdash; {{ _('Select value') }} &mdash;</option>
             {% if selected_filter %}
                 <option value="{{ selected_filter.value }}" selected>{{ selected_filter.value }}</option>
@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <div class="control-group data_filter_alias_{{ n }} {{ class }}">
+    <div class="form-group data_filter_alias_{{ n }} {{ class }}">
       <label class="control-label" for="data_filter_alias_{{ n }}">{{ _('Label') }}</label>
       <div class="controls ">
         <input id="data_filter_alias_{{ n }}" name="data_filter_alias_{{ n }}"
@@ -42,17 +42,17 @@
       </div>
     </div>
 
-    <div class="control-group control-select data_filter_value_{{ n }} {{ class }}">
+    <div class="form-group control-select data_filter_value_{{ n }} {{ class }}">
       <label class="control-label" for="data_filter_visibility_{{ n }}">{{ _('Visibility') }}</label>
       <div class="controls ">
-        <select id="data_filter_visibility_{{ n }}" name="data_filter_visibility_{{ n }}" required=required>
+        <select id="data_filter_visibility_{{ n }}" name="data_filter_visibility_{{ n }}" class="form-control" required=required>
           <option value="public" {% if selected_filter %}{{ 'selected' if selected_filter.visibility == 'public' }}{% endif %}>{{ _('Public') }}</option>
           <option value="private" {% if selected_filter %}{{ 'selected' if selected_filter.visibility == 'private' }}{% endif %}>{{ _('Private') }}</option>
         </select>
       </div>
     </div>
 
-    <div class="control-group control-select data_filter_color_{{ n }}">
+    <div class="form-group control-select data_filter_color_{{ n }}">
     <label class="control-label" for="data_filter_color_{{ n }}">{{ _('Color') }}</label>
     <div class="controls ">
      <input id="data_filter_color_{{ n }}" name="data_filter_color_{{ n }}" class="filter-color-picker jscolor {closable:true,closeText:'X'}"
