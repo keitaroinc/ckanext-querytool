@@ -2,15 +2,6 @@
 @import "inc/variables.less";
 @import "inc/mixins.less";
 @import "inc/responsive.less";
-body {
-  background: @color-primary-dark;
-}
-
-.container-wrapper {
-  background: linear-gradient(fade(@color-primary, 80%), @color-primary-dark),
-    url(/base/images/public-header-bg.png) top center no-repeat;
-  background-size: 100%;
-}
 
 .public-filters {
   margin: 0;
@@ -61,9 +52,7 @@ body {
   .tool-title {
     margin: 0 @grid-gutter-width;
   }
-  .fa {
-    color: @color-primary;
-  }
+
 }
 
 .box-title {
@@ -142,11 +131,9 @@ body {
   font-weight: 500;
   margin: @grid-gutter-width 0;
   font-size: @base-font-size + 8px;
-  color: @color-primary;
 }
 
 .list-headline {
-  color: @color-primary;
   font-size: 24px;
 }
 
@@ -213,8 +200,7 @@ body {
   }
   .desc {
     padding: @grid-gutter-width;
-    background-color: fade(@color-primary-dark, 60%);
-  }
+    }
 }
 
 .public-query {
@@ -230,7 +216,6 @@ body {
     }
     .buttons{
       padding: @grid-gutter-width @grid-gutter-width*2.5;
-      background: linear-gradient(fade(@color-primary, 90%), fade(@color-primary, 0%));
     }
   }
   .leaflet-map-pane {
