@@ -6,7 +6,7 @@
     <div class="item-wrapper">
       {{ form.markdown('text_box_description_' ~ n, id='text_box_description_' ~ n, label=_('Content'), placeholder=_('Description'), value=text_description) }}
       {% set sizes = h.querytool_get_visualization_size() %}
-      <div class="control-group control-select">
+      <div class="form-group control-select">
         <label class="control-label" for="text_box_size_{{ n }}">{{ _('Size') }}</label>
         <div class="controls ">
           <select id="text_box_size_{{ n }}" name="text_box_size_{{ n }}">
@@ -17,8 +17,8 @@
         </div>
       </div>
 
-      <ul class="inline text-right chart-actions">
-        <li class="remove"><a class="btn delete-item-btn">{% block delete_button_text %}<span class="fa fa-trash-o" aria-hidden="true"></span> {{ _('Delete') }}{% endblock %}</a></li>
+      <ul class="list-inline text-right chart-actions">
+        <li class="remove"><a class="btn btn-default delete-item-btn">{% block delete_button_text %}<span class="fa fa-trash-o" aria-hidden="true"></span> {{ _('Delete') }}{% endblock %}</a></li>
       </ul>
       <span class="grippy"></span>
     </div>
