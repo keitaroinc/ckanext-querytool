@@ -30,7 +30,7 @@
   {% endblock %}
   {% block charts %}
   <legend class="sticky-title">{{ _('Visualizations') }}
-    <ul class="inline pull-right">
+    <ul class="list-inline pull-right">
       <li><button class="btn save-visualization-btn" type="submit" id="save-edit-data-btn" name="save-edit-data" disabled="disabled"><span class="fa fa-pencil" aria-hidden="true"></span> {{ _('Save & Edit data') }}</button></li>
       <li><button id="save-visualization-btn" type="submit" class="btn btn-success save-visualization-btn" name="save" disabled="disabled">{{ _('Save') }}</button></li>
     </ul>
@@ -44,7 +44,7 @@
 
   <fieldset>
     <div id="choose-y-axis-column-container">
-      <ul class="inline">
+      <ul class="list-inline">
         <li>
           {{ form.select('item_type', 'item_type', _('Visualization type'), options=[{'value': '', 'text': _('— Select type —')}, {'value': 'chart', 'text': _('Chart')}, {'value': 'map', 'text': _('Map')}, {'value':'text-box', 'text': _('Text box')},{'value':'image', 'text': _('Image')}, {'value':'table', 'text': _('Table')}]) }}
         </li>
