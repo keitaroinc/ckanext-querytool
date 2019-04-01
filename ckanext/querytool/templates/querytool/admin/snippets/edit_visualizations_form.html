@@ -42,21 +42,20 @@
     {{ form.select('choose_y_axis_column', 'choose_y_axis_column', _('Default measure'), options=data.y_axis_options, selected=selected_y_axis_column) }}
   </div>
 
-  <fieldset>
-    <div id="choose-y-axis-column-container">
-      <ul class="list-inline">
-        <li>
-          {{ form.select('item_type', 'item_type', _('Visualization type'), options=[{'value': '', 'text': _('— Select type —')}, {'value': 'chart', 'text': _('Chart')}, {'value': 'map', 'text': _('Map')}, {'value':'text-box', 'text': _('Text box')},{'value':'image', 'text': _('Image')}, {'value':'table', 'text': _('Table')}]) }}
-        </li>
-        <li>
-          <a id="add-visualization-btn" class="btn btn-info" style="display: {{ btn_display  }}"><span class="fa fa-plus-square"></span> {{ _('Add visualization') }}</a>
-        </li>
-      </ul>
-      <div class="hidden" id="visualization-info-msg">
-        <span>Some msg</span>
-      </div>
+  <div id="choose-y-axis-column-container">
+    <ul class="list-inline">
+      <li>
+        {{ form.select('item_type', 'item_type', _('Visualization type'), options=[{'value': '', 'text': _('— Select type —')}, {'value': 'chart', 'text': _('Chart')}, {'value': 'map', 'text': _('Map')}, {'value':'text-box', 'text': _('Text box')},{'value':'image', 'text': _('Image')}, {'value':'table', 'text': _('Table')}]) }}
+      </li>
+      <li>
+        <a id="add-visualization-btn" class="btn btn-info"><span class="fa fa-plus-square"></span> {{ _('Add visualization') }}</a>
+      </li>
+    </ul>
+    <div class="hidden" id="visualization-info-msg">
+      <span>Some msg</span>
     </div>
-  </fieldset>
+  </div>
+
   <fieldset id="visualization-settings-items" class="visualizations">
     {% set measure = h.querytool_pick_first_by_attr_value(data.y_axis_columns, 'name', data.y_axis_column, default={}) %}
     {% set measure_label = measure.alias or measure.name %}

@@ -1,6 +1,6 @@
 <div id="querytool_item_{{ n }}" class="related-query-item">
-    <div class="control-group">
-      <ul class="inline text-right filter-actions pull-right">
+    <div class="form-group">
+      <ul class="list-inline text-right filter-actions pull-right">
         <li>
           {% if querytool_name %}
           {% set action_url = h.url_for('querytool_edit', querytool= '/' + querytool_name) %}
@@ -10,14 +10,14 @@
           {% endif %}
         </li>
         <li>
-          <a class="btn remove-querytool-item-btn">
+          <a class="btn btn-default remove-querytool-item-btn">
             <span class="fa fa-trash-o" aria-hidden="true"></span> {{ _('Delete') }}
           </a>
         </li>
       </ul>
     <label for="field-related-querytool_{{ n }}" class="control-label">{{ _('Related Application')  }}</label>
     <div class="controls">
-      <select id="field-related-querytool_{{ n }}" name="related_querytool_{{ n }}" required="required">
+      <select id="field-related-querytool_{{ n }}" class="form-control" name="related_querytool_{{ n }}" required="required">
           <option value="">&mdash; {{ _('Select Application') }} &mdash;</option>
           {% if querytool_name %}
             <option value="{{ querytool_name }}" selected>{{ querytool_name }}</option>
