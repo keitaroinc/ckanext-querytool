@@ -4,9 +4,9 @@
 {% set y_axis_values = y_axis_values.split(',') %}
 {% set columns = h.querytool_get_resource_columns(chart_resource, y_axis_values) %}
 {% if chart and chart.filter_name %}
-    {% set class = '' %}
+  {% set class = '' %}
 {% else %}
-{% set class = 'hidden' %}
+  {% set class = 'hidden' %}
 {% endif %}
 
 {% for item in y_axis_values %}
@@ -15,35 +15,43 @@
 {% set chart_filters = h.querytool_get_resource_columns(chart_resource, main_filters) %}
 {% set numeric_columns = h.querytool_get_numeric_resource_columns(chart_resource) %}
 
-<div id="chart_field_{{ n }}" class="item chart_field visualization-fields-section">
+<div id="chart_field_{{ n }}" class="item chart_field visualization-fields-section form-horizontal">
   {% set chart_types = h.querytool_get_chart_types() %}
   <div class="item-wrapper">
     {% set chart_id = h.querytool_get_uuid() %}
-    <div class="accordion" id="accordion_{{ chart_id }}">
+    <div class="panel-group" id="accordion_{{ chart_id }}">
 
       {# General #}
-      <div class="accordion-group">
-        <div class="accordion-heading accordion-opened">
-          <a href="#accordion_{{ chart_id }}_general" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
+      <div class="panel panel-default">
+        <div class="panel-heading panel-opened">
+          <a href="#accordion_{{ chart_id }}_general" class="panel-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
             {{ _('General') }}
           </a>
         </div>
-        <div id="accordion_{{ chart_id }}_general" class="accordion-body collapse in">
-          <div class="accordion-inner">
-
+        <div id="accordion_{{ chart_id }}_general" class="panel-body collapse in">
+          <div class="panel-inner">
             
             {# Type #}
             {% if chart %}
               {% set selected_chart_type = chart.graph %}
             {% else %}
               {% set selected_chart_type = chart_types[0].value %}
-            {% endif %}
-            {{ form.select('chart_field_graph_' ~ n, label=_('Type'), options=chart_types, selected=selected_chart_type) }}
+            {% endif %}           
+            <div class="form-group">
+                <label class="control-label col-sm-3" for="chart_field_graph_{{ n }}">{{ _('Type') }}</label>
+                <div class="col-sm-9">
+                  <select id="chart_field_graph_{{ n }}" name="chart_field_graph_{{ n }}" class="form-control">
+                    {% for type in chart_types %}
+                    <option value="{{type.value}}"{% if chart %}{{ 'selected' if type.value == selected_chart_type }}{% endif %}>{{type.text}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+            </div>
 
             {# Dimension #}
-            <div class="form-group control-select">
-              <label class="control-label" for="chart_field_axis_x_{{ n }}">{{ _('Dimension') }}</label>
-              <div class="controls ">
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="chart_field_axis_x_{{ n }}">{{ _('Dimension') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_axis_x_{{ n }}" name="chart_field_axis_x_{{ n }}" class="form-control">
                   {% for column in columns %}
                   <option value="{{column}}"{% if chart %}{{ 'selected' if column == chart.x_axis }}{% endif %}>{{column}}</option>
@@ -58,9 +66,9 @@
             {% else %}
               {% set category_option = false %}
             {% endif %}
-            <div class="form-group control-select">
-              <label class="control-label" for="chart_field_category_name_{{ n }}">{{ _('Category') }}</label>
-              <div class="controls ">
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="chart_field_category_name_{{ n }}">{{ _('Category') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_category_name_{{ n }}" class="form-control" name="chart_field_category_name_{{ n }}" {{'disabled' if category_option else ''}}>
                   <option value="">&mdash; {{ _('Select column') }} &mdash;</option>
                   {% for category in columns %}
@@ -72,9 +80,9 @@
 
             {# Size #}
             {% set sizes = h.querytool_get_visualization_size() %}
-            <div class="form-group control-select">
-              <label class="control-label" for="chart_field_size_{{ n }}">{{ _('Size') }}</label>
-              <div class="controls ">
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="chart_field_size_{{ n }}">{{ _('Size') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_size_{{ n }}" name="chart_field_size_{{ n }}" class="form-control">
                   {% for size in sizes %}
                   <option value="{{ size.value }}" {% if chart %}{{ 'selected' if size.value == chart.size }}{% endif %} >{{ size.text }}</option>
@@ -85,9 +93,9 @@
 
             {# Color #}
             {% set color_schemes = h.querytool_get_color_scheme() %}
-            <div class="form-group control-select">
-              <label class="control-label" for="chart_field_color_{{ n }}">{{ _('Color') }}</label>
-              <div class="controls ">
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="chart_field_color_{{ n }}">{{ _('Color') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_color_{{ n }}" name="chart_field_color_{{ n }}" class="form-control">
 
                   <optgroup label="Single Color">
@@ -112,13 +120,13 @@
               {% set chart_title = chart.title %}
             {% endif %}
             <div class="form-group title">
-              <label class="control-label" for="chart_field_title_{{ n }}">{{ _('Title') }}</label>
-              <div class="controls ">
-                <textarea id="chart_field_title_{{ n }}" name="chart_field_title_{{ n }}" placeholder="{{ _('Chart title') }}" rows="3">{{ chart_title }}</textarea>
+              <label class="control-label col-sm-3" for="chart_field_title_{{ n }}">{{ _('Title') }}</label>
+              <div class="col-sm-9">
+                <textarea id="chart_field_title_{{ n }}" class="form-control" name="chart_field_title_{{ n }}" placeholder="{{ _('Chart title') }}" rows="2">{{ chart_title }}</textarea>
               </div>
             </div>
             <div class="form-group title-vars">
-              <div class="controls ">
+              <div class="col-sm-12">
                 {% set filters = h.querytool_parse_json(info_query_filters or '[]') %}
                 {% set filters = filters|sort(attribute='order') %}
                 <select class="form-control">
@@ -153,20 +161,20 @@
       </div>
 
       {# X-axis #}
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a href="#accordion_{{ chart_id }}_x_axis" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a href="#accordion_{{ chart_id }}_x_axis" class="panel-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
             {{ _('X-axis') }}
           </a>
         </div>
-        <div id="accordion_{{ chart_id }}_x_axis" class="accordion-body collapse">
-          <div class="accordion-inner">
+        <div id="accordion_{{ chart_id }}_x_axis" class="panel-body collapse">
+          <div class="panel-inner">
 
             {# X sorting #}
             {% set sort_options = h.querytool_get_chart_sort() %}
-            <div id="chart_field_sort_div_{{ n }}" class="form-group control-select {% if chart and chart.category_name %}hidden{% endif %}">
-              <label class="control-label" for="chart_field_sort_{{ n }}">{{ _('X axis sorting') }}</label>
-              <div class="controls ">
+            <div id="chart_field_sort_div_{{ n }}" class="form-group {% if chart and chart.category_name %}hidden{% endif %}">
+              <label class="control-label col-sm-3" for="chart_field_sort_{{ n }}">{{ _('X axis sorting') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_sort_{{ n }}" class="form-control" name="chart_field_sort_{{ n }}">
                   {% for sort in sort_options %}
                   <option value="{{ sort.value }}" {% if chart %}{{ 'selected' if sort.value == chart.sort }}{% endif %} >{{ sort.text }}</option>
@@ -182,9 +190,9 @@
             {% else %}
               {% set text_rotation_option = true %}
             {% endif %}
-            <div class="form-group control-select">
-              <label class="control-label" for="chart_field_x_text_rotate_{{ n }}">{{ _('Label orientation') }}</label>
-              <div class="controls ">
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="chart_field_x_text_rotate_{{ n }}">{{ _('Label orientation') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_x_text_rotate_{{ n }}" class="form-control" name="chart_field_x_text_rotate_{{ n }}" {{'' if text_rotation_option else 'disabled'}}>
                   {% for rotate in text_rotation %}
                   <option value="{{ rotate.value }}" {% if chart %}{{ 'selected' if rotate.value == chart.x_text_rotate }}{% endif %}>{{ rotate.text }}</option>
@@ -203,8 +211,8 @@
               {% set x_text_multiline_option = true %}
             {% endif %}
             <div class="form-group">
-              <label class="control-label" for="chart_field_x_text_multiline_{{ n }}">{{ _('Force label in multiple lines') }}</label>
-              <div class="controls ">
+              <label class="control-label col-sm-3" for="chart_field_x_text_multiline_{{ n }}">{{ _('Force label in multiple lines') }}</label>
+              <div class="col-sm-9">
                 <input id="chart_field_x_text_multiline_{{ n }}" type="checkbox" name="chart_field_x_text_multiline_{{ n }}" value="{{ x_text_multiline }}"{% if x_text_multiline=='false' %}{% else %}checked{% endif %} {{'' if text_rotation_option else 'disabled'}}>
               </div>
             </div>
@@ -219,9 +227,9 @@
               {% set x_tick_culling_max_option = false %}
             {% endif %}
             <div class="form-group">
-              <label class="control-label" for="chart_field_x_tick_culling_max_{{ n }}">{{ _('Max number of text labels') }}</label>
-              <div class="controls ">
-                <input id="chart_field_x_tick_culling_max_{{ n }}" type="number" min="0" step="1" name="chart_field_x_tick_culling_max_{{ n }}" placeholder="10" value="{{ x_tick_culling_max }}" {{'disabled' if x_tick_culling_max_option else ''}}>
+              <label class="control-label col-sm-3" for="chart_field_x_tick_culling_max_{{ n }}">{{ _('Max number of text labels') }}</label>
+              <div class="col-sm-9">
+                <input id="chart_field_x_tick_culling_max_{{ n }}" class="form-control" type="number" min="0" step="1" name="chart_field_x_tick_culling_max_{{ n }}" placeholder="10" value="{{ x_tick_culling_max }}" {{'disabled' if x_tick_culling_max_option else ''}}>
               </div>
             </div>
 
@@ -230,14 +238,14 @@
       </div>
 
       {# Y-axis #}
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a href="#accordion_{{ chart_id }}_y_axis" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a href="#accordion_{{ chart_id }}_y_axis" class="panel-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
             {{ _('Y-axis') }}
           </a>
         </div>
-        <div id="accordion_{{ chart_id }}_y_axis" class="accordion-body collapse">
-          <div class="accordion-inner">
+        <div id="accordion_{{ chart_id }}_y_axis" class="panel-body collapse">
+          <div class="panel-inner">
 
             {# Y-axis title #}
             {% if chart %}
@@ -248,10 +256,10 @@
             {% else %}
               {% set y_label_option = true %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_y_label_{{ n }}">{{ _('Y axis title') }}</label>
-               <div class="controls ">
-                  <input id="chart_field_y_label_{{ n }}" type="text" name="chart_field_y_label_{{ n }}" value="{{ y_label }}" placeholder="{{ _('Measure by default') }}" {{'' if y_label_option else 'disabled'}}>
+            <div class="form-group">
+               <label class="control-label col-sm-3" for="chart_field_y_label_{{ n }}">{{ _('Y axis title') }}</label>
+               <div class="col-sm-9">
+                  <input id="chart_field_y_label_{{ n }}" class="form-control" type="text" name="chart_field_y_label_{{ n }}" value="{{ y_label }}" placeholder="{{ _('Measure by default') }}" {{'' if y_label_option else 'disabled'}}>
                </div>
             </div>
 
@@ -264,9 +272,9 @@
             {% else %}
               {% set y_label_hide_option = true %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_y_label_hide_{{ n }}">{{ _('Hide title') }}</label>
-               <div class="controls ">
+            <div class="form-group">
+               <label class="control-label col-sm-9" for="chart_field_y_label_hide_{{ n }}">{{ _('Hide title') }}</label>
+               <div class="col-sm-3">
                   <input id="chart_field_y_label_hide_{{ n }}" type="checkbox" name="chart_field_y_label_hide_{{ n }}" value="{{ y_label_hide }}" {% if y_label_hide=='true' %}checked{% endif %} {{'' if y_label_hide_option else 'disabled'}}>
                </div>
             </div>
@@ -280,9 +288,9 @@
             {% else %}
               {% set y_from_zero_option = true %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_y_from_zero_{{ n }}">{{ _('Start from zero') }}</label>
-               <div class="controls ">
+            <div class="form-group">
+               <label class="control-label col-sm-9" for="chart_field_y_from_zero_{{ n }}">{{ _('Start from zero') }}</label>
+               <div class="col-sm-3">
                   <input id="chart_field_y_from_zero_{{ n }}" type="checkbox" name="chart_field_y_from_zero_{{ n }}" value="{{ y_from_zero }}" {% if y_from_zero=='true' %}checked{% endif %} {{'' if y_from_zero_option else 'disabled'}}>
                </div>
             </div>
@@ -298,9 +306,9 @@
             {% else %}
               {% set ticks_formats_option = true %}
             {% endif %}
-            <div class="form-group control-select">
-               <label class="control-label" for="chart_field_y_ticks_format_{{ n }}">{{ _('Y axis label format') }}</label>
-               <div class="controls ">
+            <div class="form-group">
+               <label class="control-label col-sm-3" for="chart_field_y_ticks_format_{{ n }}">{{ _('Y axis label format') }}</label>
+               <div class="col-sm-9">
                   <select id="chart_field_y_ticks_format_{{ n }}" class="form-control" name="chart_field_y_ticks_format_{{ n }}" {{'' if ticks_formats_option else 'disabled'}}>
                   {% for tick in ticks_formats %}
                   <option value="{{ tick.value }}" {% if chart %}{{ 'selected' if tick.value == chart.y_tick_format }}{% endif %} >{{ tick.text }}</option>
@@ -314,14 +322,14 @@
       </div>
 
       {# Additional Options #}
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a href="#accordion_{{ chart_id }}_graph" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a href="#accordion_{{ chart_id }}_graph" class="panel-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
             {{ _('Additional Options') }}
           </a>
         </div>
-        <div id="accordion_{{ chart_id }}_graph" class="accordion-body collapse">
-          <div class="accordion-inner">
+        <div id="accordion_{{ chart_id }}_graph" class="panel-body collapse">
+          <div class="panel-inner">
 
 
             {# Data format #}
@@ -331,9 +339,9 @@
             {% else %}
               {% set data_formats_option = true %}
             {% endif %}
-            <div class="form-group control-select">
-              <label class="control-label" for="chart_field_data_format_{{ n }}">{{ _('Data format') }}</label>
-              <div class="controls ">
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="chart_field_data_format_{{ n }}">{{ _('Data format') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_data_format_{{ n }}" class="form-control" name="chart_field_data_format_{{ n }}" {{'' if data_formats_option else 'disabled'}}>
                   {% for format in data_formats %}
                   <option value="{{ format.value }}" {% if chart %}{{ 'selected' if format.value == chart.data_format }}{% endif %} >{{ format.text }}</option>
@@ -351,9 +359,9 @@
             {% else %}
               {% set show_labels_option = true %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_labels_{{ n }}">{{ _('Show data labels') }}</label>
-               <div class="controls ">
+            <div class="form-group">
+               <label class="control-label col-sm-9" for="chart_field_labels_{{ n }}">{{ _('Show data labels') }}</label>
+               <div class="col-sm-3">
                   <input id="chart_field_labels_{{ n }}" type="checkbox" name="chart_field_labels_{{ n }}" value="{{ show_labels }}"{% if show_labels=='false' %}{% else %}checked{% endif %} {{'' if show_labels_option else 'disabled'}}>
                </div>
             </div>
@@ -363,8 +371,8 @@
               {% set show_legend = chart.show_legend %}
             {% endif %}
             <div class="form-group ">
-               <label class="control-label" for="chart_field_legend_{{ n }}">{{ _('Show legend') }}</label>
-               <div class="controls ">
+               <label class="control-label col-sm-9" for="chart_field_legend_{{ n }}">{{ _('Show legend') }}</label>
+               <div class="col-sm-3">
                   <input id="chart_field_legend_{{ n }}" type="checkbox" name="chart_field_legend_{{ n }}" value="{{ show_legend }}"{% if show_legend=='false' %}{% else %}checked{% endif %}>
                </div>
             </div>
@@ -378,9 +386,9 @@
             {% else %}
               {% set show_labels_as_percentages_option = false %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_show_labels_as_percentages_{{ n }}">{{ _('Show labels as percentages') }}</label>
-               <div class="controls ">
+            <div class="form-group">
+               <label class="control-label col-sm-9" for="chart_field_show_labels_as_percentages_{{ n }}">{{ _('Show labels as percentages') }}</label>
+               <div class="col-sm-3">
                   <input id="chart_field_show_labels_as_percentages_{{ n }}" type="checkbox" name="chart_field_show_labels_as_percentages_{{ n }}" {% if show_labels_as_percentages=='true' %}checked{% endif %} {{'' if show_labels_as_percentages_option else 'disabled'}}>
                </div>
             </div>
@@ -390,19 +398,19 @@
       </div>
 
       {# Optional Filter #}
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a href="#accordion_{{ chart_id }}_optional_filter" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a href="#accordion_{{ chart_id }}_optional_filter" class="panel-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
             {{ _('Optional Filter') }}
           </a>
         </div>
-        <div id="accordion_{{ chart_id }}_optional_filter" class="accordion-body collapse">
-          <div class="accordion-inner">
+        <div id="accordion_{{ chart_id }}_optional_filter" class="panel-body collapse">
+          <div class="panel-inner">
 
             {# Optional Filter #}
-            <div class="form-group control-select">
-              <label class="control-label" for="chart_field_filter_name_{{ n }}">{{ _('Dimension') }}</label>
-              <div class="controls ">
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="chart_field_filter_name_{{ n }}">{{ _('Dimension') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_filter_name_{{ n }}" class="form-control" name="chart_field_filter_name_{{ n }}">
                   <option value="">&mdash; {{ _('Select column') }} &mdash;</option>
                   {% for filter in chart_filters %}
@@ -413,9 +421,9 @@
             </div>
 
             {# Optional Filter Default Value #}
-            <div id="chart_div_filter_value_{{ n }}" class="form-group control-select {{ class }}">
-              <label class="control-label" for="chart_field_filter_value_{{ n }}">{{ _('Default value') }}</label>
-              <div class="controls ">
+            <div id="chart_div_filter_value_{{ n }}" class="form-group  {{ class }}">
+              <label class="control-label col-sm-3" for="chart_field_filter_value_{{ n }}">{{ _('Default value') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_filter_value_{{ n }}" class="form-control" name="chart_field_filter_value_{{ n }}" >
                   <option value="">&mdash; {{ _('Select value') }} &mdash;</option>
                   {% if chart and chart.filter_value %}
@@ -427,16 +435,16 @@
 
             {# Optional Filter Alias #}
             <div id="chart_div_filter_alias_{{ n }}" class="form-group {{ class }}">
-              <label class="control-label" for="chart_field_filter_alias_{{ n }}">{{ _('Filter Label') }}</label>
-              <div class="controls ">
+              <label class="control-label col-sm-3" for="chart_field_filter_alias_{{ n }}">{{ _('Filter Label') }}</label>
+              <div class="col-sm-9">
                 <input id="chart_field_filter_alias_{{ n }}" name="chart_field_filter_alias_{{ n }}" {% if chart and chart.filter_alias %}value="{{chart.filter_alias}}"{% else %}value=""{% endif %} placeholder="{{ _('Enter filter Label') }}" type="text">
               </div>
             </div>
 
             {# Optional Filter Visability #}
-            <div id="chart_div_filter_visibility_{{ n }}" class="form-group control-select {{ class }}">
-              <label class="control-label" for="chart_field_filter_visibility_{{ n }}">{{ _('Filter visibility') }}</label>
-              <div class="controls ">
+            <div id="chart_div_filter_visibility_{{ n }}" class="form-group {{ class }}">
+              <label class="control-label col-sm-3" for="chart_field_filter_visibility_{{ n }}">{{ _('Filter visibility') }}</label>
+              <div class="col-sm-9">
                 <select id="chart_field_filter_visibility_{{ n }}" class="form-control" name="chart_field_filter_visibility_{{ n }}" >
                   <option value="public" {{ 'selected' if chart and chart.filter_visibility == 'public' }}>{{ _('Public') }}</option>
                   <option value="private" {{ 'selected' if chart and chart.filter_visibility == 'private' }}>{{ _('Private') }}</option>
@@ -449,14 +457,14 @@
       </div>
 
       {# Static Reference #}
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a href="#accordion_{{ chart_id }}_static_reference" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a href="#accordion_{{ chart_id }}_static_reference" class="panel-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
             {{ _('Static Reference') }}
           </a>
         </div>
-        <div id="accordion_{{ chart_id }}_static_reference" class="accordion-body collapse">
-          <div class="accordion-inner">
+        <div id="accordion_{{ chart_id }}_static_reference" class="panel-body collapse">
+          <div class="panel-inner">
 
             {# Static Reference Columns #}
             {% if selected_chart_type in ['pie', 'donut'] %}
@@ -464,10 +472,10 @@
             {% else %}
               {% set static_reference_columns_option = true %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_static_reference_columns_{{ n }}">{{ _('Static Reference Columns') }}</label>
-               <div class="controls ">
-                 <select id="chart_field_static_reference_columns_{{ n }}" class="form-control" name="chart_field_static_reference_columns_{{ n }}" multiple style="width:100%" {{'' if static_reference_columns_option else 'disabled'}}>
+            <div class="form-group">
+               <label class="control-label col-sm-3" for="chart_field_static_reference_columns_{{ n }}">{{ _('Static Reference Columns') }}</label>
+               <div class="col-sm-9">
+                 <select id="chart_field_static_reference_columns_{{ n }}" name="chart_field_static_reference_columns_{{ n }}" multiple style="width:100%" {{'' if static_reference_columns_option else 'disabled'}}>
                    {% for measure in y_axis_values %}
                      <optgroup label="{{ measure }}">
                        {% for column in numeric_columns %}
@@ -491,10 +499,10 @@
             {% else %}
               {% set static_reference_label_option = true %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_static_reference_label_{{ n }}">{{ _('Static Reference Label') }}</label>
-               <div class="controls ">
-                  <input id="chart_field_static_reference_label_{{ n }}" type="text" name="chart_field_static_reference_label_{{ n }}" value="{{ static_reference_label }}" placeholder="{{ _('Static Reference') }}" {{'' if static_reference_label_option else 'disabled'}}>
+            <div class="form-group">
+               <label class="control-label col-sm-3" for="chart_field_static_reference_label_{{ n }}">{{ _('Static Reference Label') }}</label>
+               <div class="col-sm-9">
+                  <input id="chart_field_static_reference_label_{{ n }}" class="form-control" type="text" name="chart_field_static_reference_label_{{ n }}" value="{{ static_reference_label }}" placeholder="{{ _('Static Reference') }}" {{'' if static_reference_label_option else 'disabled'}}>
                </div>
             </div>
 
@@ -503,14 +511,14 @@
       </div>
 
       {# Dynamic Reference #}
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a href="#accordion_{{ chart_id }}_dynamic_reference" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a href="#accordion_{{ chart_id }}_dynamic_reference" class="panel-toggle" data-toggle="collapse" data-parent="#accordion_{{ chart_id }}">
             {{ _('Dynamic Reference') }}
           </a>
         </div>
-        <div id="accordion_{{ chart_id }}_dynamic_reference" class="accordion-body collapse">
-          <div class="accordion-inner">
+        <div id="accordion_{{ chart_id }}_dynamic_reference" class="panel-body collapse">
+          <div class="panel-inner">
 
             {# Dynamic Reference Type #}
             {% if selected_chart_type in ['pie', 'donut'] %}
@@ -518,9 +526,9 @@
             {% else %}
               {% set dynamic_reference_type_option = true %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_dynamic_reference_type_{{ n }}">{{ _('Dynamic Reference Type') }}</label>
-               <div class="controls ">
+            <div class="form-group">
+               <label class="control-label col-sm-3" for="chart_field_dynamic_reference_type_{{ n }}">{{ _('Dynamic Reference Type') }}</label>
+               <div class="col-sm-9">
                  <select id="chart_field_dynamic_reference_type_{{ n }}" class="form-control" name="chart_field_dynamic_reference_type_{{ n }}" {{'' if dynamic_reference_type_option else 'disabled'}}>
                    <option value="">&mdash; {{ _('Select type') }} &mdash;</option>
                    {% for type in ['Maximum', 'Average', 'Minimum'] %}
@@ -539,10 +547,10 @@
             {% else %}
               {% set dynamic_reference_factor_option = true %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_dynamic_reference_factor_{{ n }}">{{ _('Dynamic Reference Factor') }}</label>
-               <div class="controls ">
-                  <input id="chart_field_dynamic_reference_factor_{{ n }}" type="number" min="0" step="0.1" name="chart_field_dynamic_reference_factor_{{ n }}" value="{{ dynamic_reference_factor }}" default="1" placeholder="1" {{'' if dynamic_reference_factor_option else 'disabled'}}>
+            <div class="form-group">
+               <label class="control-label col-sm-3" for="chart_field_dynamic_reference_factor_{{ n }}">{{ _('Dynamic Reference Factor') }}</label>
+               <div class="col-sm-9">
+                  <input id="chart_field_dynamic_reference_factor_{{ n }}" class="form-control" type="number" min="0" step="0.1" name="chart_field_dynamic_reference_factor_{{ n }}" value="{{ dynamic_reference_factor }}" default="1" placeholder="1" {{'' if dynamic_reference_factor_option else 'disabled'}}>
                </div>
             </div>
 
@@ -555,10 +563,10 @@
             {% else %}
               {% set dynamic_reference_label_option = true %}
             {% endif %}
-            <div class="form-group ">
-               <label class="control-label" for="chart_field_dynamic_reference_label_{{ n }}">{{ _('Dynamic Reference Label') }}</label>
-               <div class="controls ">
-                  <input id="chart_field_dynamic_reference_label_{{ n }}" type="text" name="chart_field_dynamic_reference_label_{{ n }}" value="{{ dynamic_reference_label }}" placeholder="{{ _('Dynamic Reference') }}" {{'' if dynamic_reference_label_option else 'disabled'}}>
+            <div class="form-group">
+               <label class="control-label col-sm-3" for="chart_field_dynamic_reference_label_{{ n }}">{{ _('Dynamic Reference Label') }}</label>
+               <div class="col-sm-9">
+                  <input id="chart_field_dynamic_reference_label_{{ n }}" class="form-control" type="text" name="chart_field_dynamic_reference_label_{{ n }}" value="{{ dynamic_reference_label }}" placeholder="{{ _('Dynamic Reference') }}" {{'' if dynamic_reference_label_option else 'disabled'}}>
                </div>
             </div>
 
