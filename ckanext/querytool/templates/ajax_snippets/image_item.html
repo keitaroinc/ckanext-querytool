@@ -1,5 +1,5 @@
 <div id="image_item_{{ n }}" class="item image_item visualization-fields-section form-horizontal">
-   <div class="item-wrapper">
+   <div class="item-wrapper col-md-4">
       {% snippet 'querytool/admin/snippets/image_upload.html', data=data,n=n  %}
       <ul class="list-inline text-right chart-actions">
          <li class="remove"><a class="btn btn-default delete-item-btn">{% block delete_button_text %}<span class="fa fa-trash-o" aria-hidden="true"></span> {{ _('Delete') }}{% endblock %}</a></li>

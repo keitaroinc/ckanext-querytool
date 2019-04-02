@@ -30,31 +30,31 @@ Example usage:
    data-module-field_clear="{{ media_clear_upload }}"
    data-module-upload_label={{_("Image")}}>
    <div class="form-group control-full">
-      <label class="control-label col-sm-3" for="field-image-url">{{ _('Image URL') }}</label>
-      <div class="col-sm-9">
+      <label class="control-label col-md-1" for="field-image-url">{{ _('Image URL') }}</label>
+      <div class="col-md-9">
          <input id="field-image-url" type="text" name="{{ media_image_url }}" value="{{ image_url }}" placeholder="http://example.com/my-image.jpg">
       </div>
    </div>
    <div class="form-group control-full">
-      <label class="control-label col-sm-3" for="field-image-upload">{{ _('Image') }} </label>
-      <div class="col-sm-9 ">
+      <label class="control-label col-md-1" for="field-image-upload">{{ _('Image') }} </label>
+      <div class="col-md-9 ">
          <input id="field-image-upload" type="file" name="{{ media_image_upload }}" value="{{ image_url }}" placeholder="">
       </div>
    </div>
 </div>
 {% else %}
 <div class="form-group control-full">
-   <label class="control-label col-sm-3" for="field-image-url">{{ _('Image URL') }}</label>
-   <div class="col-sm-9">
+   <label class="control-label col-md-1" for="field-image-url">{{ _('Image URL') }}</label>
+   <div class="col-md-9">
       <input id="field-image-url" type="text" name="{{ media_image_url }}" value="{{ image_url }}" placeholder="http://example.com/my-image.jpg">
    </div>
 </div>
 {% endif %}
 {% set sizes = h.querytool_get_visualization_size() %}
 <div class="form-group control-select">
-   <label class="control-label col-sm-3" for="image_field_size_{{ n }}">{{ _('Size') }}</label>
-   <div class="col-sm-9">
-      <select id="image_field_size_{{ n }}" name="image_field_size_{{ n }}">
+   <label class="control-label col-md-1" for="image_field_size_{{ n }}">{{ _('Size') }}</label>
+   <div class="col-md-9">
+      <select id="image_field_size_{{ n }}" name="image_field_size_{{ n }}" class="form-control">
       {% for size in sizes %}
       <option value="{{ size.value }}" {% if data %}{{ 'selected' if size.value == data.size }}{% endif %} >{{ _(size.text) }}</option>
       {% endfor %}
