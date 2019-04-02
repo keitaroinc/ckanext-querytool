@@ -12,7 +12,7 @@
     <div class="form-group control-select">
       <label class="control-label" for="data_filter_name_{{ n }}">{{ _('Dimension') }}</label>
       <div class="controls ">
-        <select id="data_filter_name_{{ n }}" name="data_filter_name_{{ n }}" class="form-control" required=required>
+        <select id="data_filter_name_{{ n }}" name="data_filter_name_{{ n }}" class="form-control form-control-short" required=required>
             <option value="">&mdash; {{ _('Select column') }} &mdash;</option>
           {% for filter in active_filters %}
             <option value="{{ filter }}" {% if selected_filter %}{{ 'selected' if filter == selected_filter.name }}{% endif %}>{{ filter }}</option>
@@ -24,7 +24,7 @@
     <div class="form-group control-select data_filter_value_{{ n }} {{ class }}">
       <label class="control-label" for="data_filter_value_{{ n }}">{{ _('Default Value') }}</label>
       <div class="controls ">
-        <select id="data_filter_value_{{ n }}" name="data_filter_value_{{ n }}" class="form-control" required=required>
+        <select id="data_filter_value_{{ n }}" name="data_filter_value_{{ n }}" class="form-control form-control-short" required=required>
           <option value="">&mdash; {{ _('Select value') }} &mdash;</option>
             {% if selected_filter %}
                 <option value="{{ selected_filter.value }}" selected>{{ selected_filter.value }}</option>
@@ -36,7 +36,7 @@
     <div class="form-group data_filter_alias_{{ n }} {{ class }}">
       <label class="control-label" for="data_filter_alias_{{ n }}">{{ _('Label') }}</label>
       <div class="controls ">
-        <input id="data_filter_alias_{{ n }}" name="data_filter_alias_{{ n }}"
+        <input id="data_filter_alias_{{ n }}" class="form-control form-control-short" name="data_filter_alias_{{ n }}"
              {% if selected_filter %}value="{{selected_filter.alias}}"{% else %}value=""{% endif %}
              placeholder="{{ _('Enter filter label') }}" type="text" required=required>
       </div>
@@ -45,7 +45,7 @@
     <div class="form-group control-select data_filter_value_{{ n }} {{ class }}">
       <label class="control-label" for="data_filter_visibility_{{ n }}">{{ _('Visibility') }}</label>
       <div class="controls ">
-        <select id="data_filter_visibility_{{ n }}" name="data_filter_visibility_{{ n }}" class="form-control" required=required>
+        <select id="data_filter_visibility_{{ n }}" name="data_filter_visibility_{{ n }}" class="form-control form-control-short" required=required>
           <option value="public" {% if selected_filter %}{{ 'selected' if selected_filter.visibility == 'public' }}{% endif %}>{{ _('Public') }}</option>
           <option value="private" {% if selected_filter %}{{ 'selected' if selected_filter.visibility == 'private' }}{% endif %}>{{ _('Private') }}</option>
         </select>
