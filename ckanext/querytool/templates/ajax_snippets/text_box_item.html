@@ -2,9 +2,9 @@
   {% if box %}
      {% set text_description = box.description %}
   {% endif %}
-  <div id="text_box_{{ n }}" class="item text-boxs-section text_box visualization-fields-section">
+  <div id="text_box_{{ n }}" class="item text-boxs-section text_box visualization-fields-section form-horizontal">
     <div class="item-wrapper">
-      {{ form.markdown('text_box_description_' ~ n, id='text_box_description_' ~ n, label=_('Content'), placeholder=_('Description'), value=text_description) }}
+      {{ form.markdown('text_box_description_' ~ n, id='text_box_description_' ~ n, label=_('Content'), classes=["col-md-9"], placeholder=_('Description'), value=text_description) }}
       {% set sizes = h.querytool_get_visualization_size() %}
       <div class="form-group col-md-6">
         <label class="control-label col-md-1" for="text_box_size_{{ n }}">{{ _('Size') }}</label>
