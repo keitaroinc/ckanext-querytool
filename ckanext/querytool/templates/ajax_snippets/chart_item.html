@@ -213,7 +213,7 @@
             <div class="form-group">
               <label class="control-label col-sm-3" for="chart_field_x_text_multiline_{{ n }}">{{ _('Force label in multiple lines') }}</label>
               <div class="col-sm-9">
-                <input id="chart_field_x_text_multiline_{{ n }}" type="checkbox" name="chart_field_x_text_multiline_{{ n }}" value="{{ x_text_multiline }}"{% if x_text_multiline=='false' %}{% else %}checked{% endif %} {{'' if text_rotation_option else 'disabled'}}>
+                <input id="chart_field_x_text_multiline_{{ n }}" type="checkbox" class="checkbox-middle" name="chart_field_x_text_multiline_{{ n }}" value="{{ x_text_multiline }}"{% if x_text_multiline=='false' %}{% else %}checked{% endif %} {{'' if text_rotation_option else 'disabled'}}>
               </div>
             </div>
 
@@ -273,9 +273,9 @@
               {% set y_label_hide_option = true %}
             {% endif %}
             <div class="form-group">
-               <label class="control-label col-sm-9" for="chart_field_y_label_hide_{{ n }}">{{ _('Hide title') }}</label>
-               <div class="col-sm-3">
-                  <input id="chart_field_y_label_hide_{{ n }}" type="checkbox" name="chart_field_y_label_hide_{{ n }}" value="{{ y_label_hide }}" {% if y_label_hide=='true' %}checked{% endif %} {{'' if y_label_hide_option else 'disabled'}}>
+               <label class="control-label col-sm-3" for="chart_field_y_label_hide_{{ n }}">{{ _('Hide title') }}</label>
+               <div class="col-sm-9">
+                  <input id="chart_field_y_label_hide_{{ n }}" type="checkbox" class="checkbox-middle" name="chart_field_y_label_hide_{{ n }}" value="{{ y_label_hide }}" {% if y_label_hide=='true' %}checked{% endif %} {{'' if y_label_hide_option else 'disabled'}}>
                </div>
             </div>
 
@@ -289,9 +289,9 @@
               {% set y_from_zero_option = true %}
             {% endif %}
             <div class="form-group">
-               <label class="control-label col-sm-9" for="chart_field_y_from_zero_{{ n }}">{{ _('Start from zero') }}</label>
-               <div class="col-sm-3">
-                  <input id="chart_field_y_from_zero_{{ n }}" type="checkbox" name="chart_field_y_from_zero_{{ n }}" value="{{ y_from_zero }}" {% if y_from_zero=='true' %}checked{% endif %} {{'' if y_from_zero_option else 'disabled'}}>
+               <label class="control-label col-sm-3" for="chart_field_y_from_zero_{{ n }}">{{ _('Start from zero') }}</label>
+               <div class="col-sm-9">
+                  <input id="chart_field_y_from_zero_{{ n }}" type="checkbox" class="checkbox-middle" name="chart_field_y_from_zero_{{ n }}" value="{{ y_from_zero }}" {% if y_from_zero=='true' %}checked{% endif %} {{'' if y_from_zero_option else 'disabled'}}>
                </div>
             </div>
 
@@ -360,9 +360,9 @@
               {% set show_labels_option = true %}
             {% endif %}
             <div class="form-group">
-               <label class="control-label col-sm-9" for="chart_field_labels_{{ n }}">{{ _('Show data labels') }}</label>
-               <div class="col-sm-3">
-                  <input id="chart_field_labels_{{ n }}" type="checkbox" name="chart_field_labels_{{ n }}" value="{{ show_labels }}"{% if show_labels=='false' %}{% else %}checked{% endif %} {{'' if show_labels_option else 'disabled'}}>
+               <label class="control-label col-sm-3" for="chart_field_labels_{{ n }}">{{ _('Show data labels') }}</label>
+               <div class="col-sm-9">
+                  <input id="chart_field_labels_{{ n }}" type="checkbox" class="checkbox-middle" name="chart_field_labels_{{ n }}" value="{{ show_labels }}"{% if show_labels=='false' %}{% else %}checked{% endif %} {{'' if show_labels_option else 'disabled'}}>
                </div>
             </div>
 
@@ -371,9 +371,9 @@
               {% set show_legend = chart.show_legend %}
             {% endif %}
             <div class="form-group ">
-               <label class="control-label col-sm-9" for="chart_field_legend_{{ n }}">{{ _('Show legend') }}</label>
-               <div class="col-sm-3">
-                  <input id="chart_field_legend_{{ n }}" type="checkbox" name="chart_field_legend_{{ n }}" value="{{ show_legend }}"{% if show_legend=='false' %}{% else %}checked{% endif %}>
+               <label class="control-label col-sm-3" for="chart_field_legend_{{ n }}">{{ _('Show legend') }}</label>
+               <div class="col-sm-9">
+                  <input id="chart_field_legend_{{ n }}" type="checkbox" class="checkbox-middle" name="chart_field_legend_{{ n }}" value="{{ show_legend }}"{% if show_legend=='false' %}{% else %}checked{% endif %}>
                </div>
             </div>
 
@@ -387,9 +387,9 @@
               {% set show_labels_as_percentages_option = false %}
             {% endif %}
             <div class="form-group">
-               <label class="control-label col-sm-9" for="chart_field_show_labels_as_percentages_{{ n }}">{{ _('Show labels as percentages') }}</label>
-               <div class="col-sm-3">
-                  <input id="chart_field_show_labels_as_percentages_{{ n }}" type="checkbox" name="chart_field_show_labels_as_percentages_{{ n }}" {% if show_labels_as_percentages=='true' %}checked{% endif %} {{'' if show_labels_as_percentages_option else 'disabled'}}>
+               <label class="control-label col-sm-3" for="chart_field_show_labels_as_percentages_{{ n }}">{{ _('Show labels as percentages') }}</label>
+               <div class="col-sm-9">
+                  <input id="chart_field_show_labels_as_percentages_{{ n }}" class="checkbox-middle" type="checkbox" name="chart_field_show_labels_as_percentages_{{ n }}" {% if show_labels_as_percentages=='true' %}checked{% endif %} {{'' if show_labels_as_percentages_option else 'disabled'}}>
                </div>
             </div>
 
