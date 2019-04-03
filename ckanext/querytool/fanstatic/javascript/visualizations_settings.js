@@ -443,7 +443,7 @@
 
                 item = $(item);
                 var order = i + 1;
-                if (item.context.id.indexOf('chart_field') >= 0) {
+                if (item[0].id.indexOf('chart_field') >= 0) {
                     var dropdownGraphType = item.find('[id*=chart_field_graph_]');
                     var dropdownColorScheme = item.find('[id*=chart_field_color_]');
                     var dropdownAxisY = item.find('[id*=chart_field_axis_y_]');
@@ -598,11 +598,10 @@
                     inputXTickCullingMax.attr('name', 'chart_field_x_tick_culling_max_' + order);
 
 
-                } else if (item.context.id.indexOf('text_box') >= 0) {
+                } else if (item[0].id.indexOf('text_box') >= 0) {
 
                     var description = item.find('[id*=text_box_description_]');
                     var size = item.find('[id*=text_box_size_]');
-
                     item.attr('id', 'text_box_' + order);
 
                     description.attr('id', 'text_box_description_' + order);
@@ -611,7 +610,7 @@
                     size.attr('id', 'text_box_size_' + order);
                     size.attr('name', 'text_box_size_' + order);
 
-                } else if (item.context.id.indexOf('image_item') >= 0) {
+                } else if (item[0].id.indexOf('image_item') >= 0) {
                     var url = item.find('[name*=media_image_url_]');
                     var size = item.find('[id*=image_field_size_]');
                     var upload = item.find('[name*=media_image_upload_]');
@@ -624,7 +623,7 @@
                     upload.attr('name', 'media_image_upload_' + order);
                     clear.attr('name', 'media_clear_upload_' + order);
 
-                } else if (item.context.id.indexOf('map_item') >= 0) {
+                } else if (item[0].id.indexOf('map_item') >= 0) {
                     var map_resource_url = item.find('[id*=map_resource_]');
                     var map_title_field = item.find('[id*=map_title_field_]');
                     var map_key_field = item.find('[id*=map_key_field_]');
@@ -671,7 +670,7 @@
                     selectMapFilterVisibility.attr('name', 'map_field_filter_visibility_' + order);
                     selectMapFilterVisibilityDiv.attr('id', 'map_div_filter_visibility_' + order);
 
-                } else if (item.context.id.indexOf('table_item') >= 0) {
+                } else if (item[0].id.indexOf('table_item') >= 0) {
                     var table_size = item.find('[id*=table_size_]');
                     var table_data_format = item.find('[id*=table_data_format_]');
                     var table_main_value = item.find('[id*=table_main_value_]');
