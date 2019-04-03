@@ -28,7 +28,7 @@ Example usage:
 {% endblock %}
 
 
-  <legend>{{ _('Basic info') }}</legend>
+  <legend class="form-group">{{ _('Basic info') }}</legend>
 
   {{ form.input('title', id='field-title', label=_('Save As'), placeholder=_('Title of the query tool'), value=data.title, error=errors.title, classes=['control-full', 'control-large'], attrs={'data-module': 'slug-preview-target', 'class': 'form-control'}) }}
 
@@ -44,7 +44,7 @@ Example usage:
   <div class="form-group">
     <label for="field-group">{{ _('Group') }}</label>
     <div class="controls">
-      <select id="field-group" name="group" class="form-control">
+      <select id="field-group" name="group" class="form-control form-control-short">
         {% for group in h.querytool_get_groups() %}
         <option value="{{ group }}" {% if group == data.group|trim %}selected="selected"{% endif %}>{{ group }}</option>
         {% endfor %}
@@ -56,7 +56,7 @@ Example usage:
   <div class="form-group">
     <label for="field-organizations">{{ _('Organization') }}</label>
     <div class="controls">
-      <select id="field-organizations" name="owner_org" class="form-control">
+      <select id="field-organizations" name="owner_org" class="form-control form-control-short">
         {% for organization in organizations_available %}
         <option value="{{ organization.id }}">{{ organization.display_name }}</option>
         {% endfor %}
@@ -64,12 +64,12 @@ Example usage:
     </div>
   </div>
 
-  <legend>{{ _('Settings') }}</legend>
+  <legend class="form-group">{{ _('Settings') }}</legend>
 
   <div class="form-group">
     <label for="field-type">{{ _('Application Type') }}</label>
     <div class="controls">
-      <select id="field-type" name="type" class="form-control">
+      <select id="field-type" name="type" class="form-control form-control-short">
         {% for option in [('main', _('Main')), ('related', _('Related'))] %}
         <option value="{{ option[0] }}" {% if option[0] == data.type|trim %}selected="selected"{% endif %}>{{ option[1] }}</option>
         {% endfor %}
@@ -79,7 +79,7 @@ Example usage:
   <div class="form-group">
     <label for="field-private">{{ _('Visibility') }}</label>
     <div class="controls">
-      <select id="field-private" name="private" class="form-control" disabled>
+      <select id="field-private" name="private" class="form-control form-control-short" disabled>
         {% for option in [('True', _('Private')), ('False', _('Public'))] %}
         <option value="{{ option[0] }}" {% if option[0] == data.private|trim %}selected="selected"{% endif %}>{{ option[1] }}</option>
         {% endfor %}
@@ -102,12 +102,12 @@ Example usage:
     </a>
   </div>
 
-  <legend>{{ _('Select dataset and resource') }}</legend>
+  <legend class="form-group">{{ _('Select dataset and resource') }}</legend>
   {% block querytool_dataset %}
     <div class="form-group">
       <label for="field-datasets"><span title="This field is required" class="control-required">*</span>{{ _("Dataset") }}</label>
       <div class="controls">
-        <select id="field-datasets"  name="dataset_name" data-module="autocomplete" >
+        <select id="field-datasets" class="query-select" name="dataset_name" data-module="autocomplete" >
           <option value="" {{ 'selected' if not data.dataset_name }}>-- {{ _('Choose Dataset') }} --</option>
           {% for dataset in datasets %}
             <option value="{{ dataset }}" {{ 'selected' if dataset == data.dataset_name }}>{{ dataset }}</option>
@@ -122,21 +122,31 @@ Example usage:
   {% endif %}
 
   {% block querytool_choose_chart_resource %}
-    {{ form.select('chart_resource', label=_('Resource'), options=dataset_resources, selected=data.chart_resource, error=errors.chart_resource, attrs={'required': 'required'}) }}
+  <div class="form-group">
+      <label for="field-chart_resource"><span title="This field is required" class="control-required">*</span>{{ _("Resource") }}</label>
+      <div class="controls">
+        <select id="field-chart_resource" class="query-select"  name="chart_resource" data-module="autocomplete" >
+          <option value="" {{ 'selected' if not data.dataset_name }}>-- {{ _('Choose Resource') }} --</option>
+          {% for resource in dataset_resources %}
+            <option value="{{ resource.value }}" {{ 'selected' if resource.value == data.chart_resource }}>{{ resource.text }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
   {% endblock %}
 
 
-  <legend>{{ _('Measure(s)') }}</legend>
+  <legend class="form-group">{{ _('Measure(s)') }}</legend>
   {% set columns = h.querytool_get_numeric_resource_columns(data.chart_resource) %}
   <div id="y-axis-columns-container" {% if columns | length == 0 %} style="display: none;" {% endif %}>
-    <div id="y-axis-columns-results" class="row">
+    <div id="y-axis-columns-results" style="display:flex; flex-wrap:wrap; justify-content:space-between;     flex-direction: row;">
       {% for column in columns %}
         {% set column_id = h.querytool_get_uuid() %}
         {% set measure = h.querytool_pick_first_by_attr_value(querytool.y_axis_columns, 'name', column) %}
-        <div class="input-group control-checkbox-group">
-          <input name="y_axis_name_{{ column_id }}" id="y_axis_name_{{ column_id }}" type="checkbox" value="{{ column }}" {% if measure %} checked {% endif %} />
-          <label class="control-label" for="y_axis_name_{{ column_id }}">{{ column }}</label>
-          <input name="y_axis_alias_{{ column_id }}" id="y_axis_alias_{{ column_id }}" type="text" placeholder="Optional label" value="{{ measure.alias }}">
+        <div class="control-checkbox-group row form-inline" >
+          <input name="y_axis_name_{{ column_id }}" id="y_axis_name_{{ column_id }}" style="vertical-align:middle"  type="checkbox" value="{{ column }}" {% if measure %} checked {% endif %} />
+          <span class="control-label " for="y_axis_name_{{ column_id }}">{{ column }}</label>
+          <input name="y_axis_alias_{{ column_id }}" id="y_axis_alias_{{ column_id }}" class="form-control" type="text" placeholder="Optional label" value="{{ measure.alias }}">
         </div>
       {% endfor %}
     </div>
@@ -147,7 +157,7 @@ Example usage:
       {% if data.chart_resource %} style="display: none;" {% endif %}>{{ _('Please choose a resource to see available numeric columns.') }}</em><br><br>
 
   {% block querytool_main_filters %}
-    <legend>{{ _('Filter(s)') }}</legend>
+    <legend class="form-group">{{ _('Filter(s)') }}</legend>
 
     <fieldset id="main-filters">
 

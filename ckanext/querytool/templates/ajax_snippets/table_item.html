@@ -16,7 +16,7 @@
       <div class="form-group">
         <label class="control-label col-sm-1" for="table_field_title_{{ n }}">{{ _('Title') }}</label>
         <div class="col-sm-11">
-          <input id="table_field_title_{{ n }}" class="form-control" name="table_field_title_{{ n }}" value="{{ table_title }}" placeholder="{{ _('Table title') }}" type="text">
+          <input id="table_field_title_{{ n }}" class="form-control form-control-short" name="table_field_title_{{ n }}" value="{{ table_title }}" placeholder="{{ _('Table title') }}" type="text">
         </div>
       </div>
       
@@ -24,7 +24,7 @@
     <div class="form-group">
       <label class="control-label col-sm-1" for="table_main_value_{{ n }}">{{ _('Dimension') }}</label>
       <div class="col-sm-11">
-        <select id="table_main_value_{{ n }}" name="table_main_value_{{ n }}" class="form-control">
+        <select id="table_main_value_{{ n }}" name="table_main_value_{{ n }}" class="form-control form-control-short">
         {% for column in columns %}
         <option value="{{column}}"{% if table %}{{ 'selected' if column == table.main_value }}{% endif %}>{{column}}</option>
         {% endfor %}
@@ -34,7 +34,7 @@
     <div class="form-group">
       <label class="control-label col-sm-1" for="table_category_name_{{ n }}">{{ _('Category') }}</label>
       <div class="col-sm-11">
-        <select id="table_category_name_{{ n }}" name="table_category_name_{{ n }}" class="form-control">
+        <select id="table_category_name_{{ n }}" name="table_category_name_{{ n }}" class="form-control form-control-short">
         <option value="">&mdash; {{ _('Select column') }} &mdash;</option>
         {% for category in columns %}
         <option value="{{category}}"{% if table %}{{ 'selected' if category == table.category_name }}{% endif %}>{{category}}</option>
@@ -49,7 +49,7 @@
     <div class="form-group">
       <label class="control-label col-sm-1" for="table_field_filter_name_{{ n }}">{{ _('Optional Filter') }}</label>
       <div class="col-sm-11">
-        <select id="table_field_filter_name_{{ n }}" name="table_field_filter_name_{{ n }}" class="form-control">
+        <select id="table_field_filter_name_{{ n }}" name="table_field_filter_name_{{ n }}" class="form-control form-control-short">
           <option value="">&mdash; {{ _('Select column') }} &mdash;</option>
           {% for filter in table_filters %}
           <option value="{{filter}}"{% if table %}{{ 'selected' if filter == table.filter_name }}{% endif %}>{{filter}}</option>
@@ -60,7 +60,7 @@
     <div id="table_div_filter_value_{{ n }}" class="form-group">
       <label class="control-label col-sm-1" for="table_field_filter_value_{{ n }}">{{ _('Default value') }}</label>
       <div class="col-sm-11">
-        <select id="table_field_filter_value_{{ n }}" name="table_field_filter_value_{{ n }}" class="form-control">
+        <select id="table_field_filter_value_{{ n }}" name="table_field_filter_value_{{ n }}" class="form-control form-control-short">
           <option value="">&mdash; {{ _('Select value') }} &mdash;</option>
           {% if table and table.filter_value %}
           <option value="{{ table.filter_value }}" selected>{{ table.filter_value }}</option>
@@ -71,7 +71,7 @@
     <div id="table_div_filter_alias_{{ n }}" class="form-group">
       <label class="control-label col-sm-1" for="table_field_filter_alias_{{ n }}">{{ _('Filter Label') }}</label>
       <div class="col-sm-11">
-        <input id="table_field_filter_alias_{{ n }}" class="form-control" name="table_field_filter_alias_{{ n }}"
+        <input id="table_field_filter_alias_{{ n }}" class="form-control form-control-short" name="table_field_filter_alias_{{ n }}"
         {% if table and table.filter_alias %}value="{{table.filter_alias}}"{% else %}value=""{% endif %}
         placeholder="{{ _('Enter filter label') }}" type="text">
       </div>
@@ -79,7 +79,7 @@
     <div id="table_div_filter_visibility_{{ n }}" class="form-group  {{ class }}">
       <label class="control-label col-sm-1" for="table_field_filter_visibility_{{ n }}">{{ _('Filter visibility') }}</label>
       <div class="col-sm-11">
-        <select id="table_field_filter_visibility_{{ n }}" name="table_field_filter_visibility_{{ n }}" class="form-control">
+        <select id="table_field_filter_visibility_{{ n }}" name="table_field_filter_visibility_{{ n }}" class="form-control form-control-short">
         <option value="public" {{ 'selected' if table and table.filter_visibility == 'public' }}>{{ _('Public') }}</option>
         <option value="private" {{ 'selected' if table and table.filter_visibility == 'private' }}>{{ _('Private') }}</option>
         </select>
@@ -89,7 +89,7 @@
     <div class="form-group">
       <label class="control-label col-sm-1" for="table_size_{{ n }}">{{ _('Size') }}</label>
       <div class="col-sm-11">
-        <select id="table_size_{{ n }}" name="table_size_{{ n }}" class="form-control">
+        <select id="table_size_{{ n }}" name="table_size_{{ n }}" class="form-control form-control-short">
         {% for size in sizes %}
         <option value="{{ size.value }}" {% if table %}{{ 'selected' if size.value == table.size }}{% endif %} >{{ size.text }}</option>
         {% endfor %}
@@ -100,7 +100,7 @@
     <div class="form-group">
       <label class="control-label col-sm-1" for="table_data_format_{{ n }}">{{ _('Data format') }}</label>
       <div class="col-sm-11">
-        <select id="table_data_format_{{ n }}" name="table_data_format_{{ n }}" class="form-control">
+        <select id="table_data_format_{{ n }}" name="table_data_format_{{ n }}" class="form-control form-control-short">
           {% for format in data_formats %}
           <option value="{{ format.value }}" {% if table %}{{ 'selected' if format.value == table.data_format }}{% endif %} >{{ format.text }}</option>
           {% endfor %}
