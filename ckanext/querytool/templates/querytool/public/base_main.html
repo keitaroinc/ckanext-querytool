@@ -26,7 +26,7 @@
   {% block page_header_content %}
     <div class="container">
       <div class="row">
-        <div class="span10 offset1">
+        <div class="col-md-10 col-md-offset-1">
           <div class="page-header">
             {% block page_header_inner_content %}
               {% block page_header_icon %}{% endblock %}
@@ -46,7 +46,7 @@
       {% set groups = h.querytool_get_groups() %}
       {% for key, value in groups.iteritems() %}
       {% set url = h.url_for('querytool_public_list_by_group', group=key) %}
-          <div class="span4">
+          <div class="col-md-4">
             <a class="query-tool box" href="{{ url }}">
             <img class="thumbnail" src="/base/images/query-icon.png" alt="{{ value }}">
             <span class="tool-title">{{ value }}</span>
