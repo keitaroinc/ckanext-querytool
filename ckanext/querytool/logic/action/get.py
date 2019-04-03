@@ -189,7 +189,6 @@ def querytool_get_resource_data(context, data_dict):
 
 @toolkit.side_effect_free
 def querytool_get_chart_data(context, data_dict):
-
     category = data_dict.get('category')
     sql_string = data_dict.get('sql_string')
     x_axis = data_dict.get('x_axis')

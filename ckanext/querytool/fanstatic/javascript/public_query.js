@@ -91,7 +91,7 @@
             var resource_id = elem.parent().parent().parent().find('.field_resource_id').val();
             var select_size = $(this)
                 .find("option")
-                .size();
+                .length;
 
             if (select_size <= 2) {
                 api

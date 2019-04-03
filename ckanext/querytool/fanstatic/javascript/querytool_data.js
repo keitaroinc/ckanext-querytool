@@ -157,7 +157,7 @@
             var filter_name = $('#' + filter_name_select_id).find(":selected").val();
 
             var resource_input_id = filter_name_select_id.replace('data_filter_name', 'resource_id');
-            var select_size = $(this).find("option").size();
+            var select_size = $(this).find("option").length;
 
             var id;
             if (resource_id) {
@@ -180,7 +180,7 @@
                             $('#' + filter_value_select_id).append(new Option(elem, elem));
                         }
                     });
-                }).error(function(err) {
+                }).fail(function(err) {
                     console.log("Error " + err);
                 });
             }
@@ -313,7 +313,7 @@
         handlePrivacyForType(typeField);
 
         var datasetField = $('#field-datasets');
-        var chartResourceSelect = $('#chart_resource');
+        var chartResourceSelect = $('#field-chart_resource');
         var yAxisColumnsResults = $('#y-axis-columns-results');
         var yAxisColumnsNotice = $('#y-axis-columns-notice');
         var yAxisColumnsContainer = $('#y-axis-columns-container');
@@ -476,7 +476,7 @@
                         yAxisColumnsNotice.text(_('An error occured while getting columns.'));
                     }
                 })
-                .error(function(error) {
+                .fail(function(error) {
                     yAxisColumnsNotice.css('display', 'block');
                     yAxisColumnsNotice.text(_('An error occured while getting columns.'));
                 });
