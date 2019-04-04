@@ -154,7 +154,7 @@
             var resource_id = $("#" + filter_resource_input_id).val();
             var select_size = $(this)
                 .find("option")
-                .size();
+                .length;
 
             if (select_size <= 1) {
                 api

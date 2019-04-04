@@ -232,7 +232,7 @@
 
             var querytool_item_id = querytool_name_select_id.replace('field-related-querytool', 'related-query-item')
             var selected_querytools = _getSelectedQuerytools(querytool_item_id);
-            var select_size = $(this).find("option").size();
+            var select_size = $(this).find("option").length;
             var name = $('.slug-preview-value').text();
             selected_querytools.push(name);
             api.post('get_available_querytools', {

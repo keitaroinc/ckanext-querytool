@@ -437,7 +437,7 @@
             <div id="chart_div_filter_alias_{{ n }}" class="form-group {{ class }}">
               <label class="control-label col-sm-3" for="chart_field_filter_alias_{{ n }}">{{ _('Filter Label') }}</label>
               <div class="col-sm-9">
-                <input id="chart_field_filter_alias_{{ n }}" name="chart_field_filter_alias_{{ n }}" {% if chart and chart.filter_alias %}value="{{chart.filter_alias}}"{% else %}value=""{% endif %} placeholder="{{ _('Enter filter Label') }}" type="text">
+                <input id="chart_field_filter_alias_{{ n }}" class="form-control" name="chart_field_filter_alias_{{ n }}" {% if chart and chart.filter_alias %}value="{{chart.filter_alias}}"{% else %}value=""{% endif %} placeholder="{{ _('Enter filter Label') }}" type="text">
               </div>
             </div>
 

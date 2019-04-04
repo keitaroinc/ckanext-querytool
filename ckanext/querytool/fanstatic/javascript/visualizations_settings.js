@@ -186,7 +186,7 @@
             var filter_name = $('#' + filter_name_select_id).find(":selected").val();
             var vizForm = $('#visualizations-form');
             var resource_id = vizForm.data('chartResource');
-            var select_size = $(this).find("option").size();
+            var select_size = $(this).find("option").length;
             var vizForm = $('#visualizations-form');
             var mainFilters = vizForm.data('mainFilters');
 
