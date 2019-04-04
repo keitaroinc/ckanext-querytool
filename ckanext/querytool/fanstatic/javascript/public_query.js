@@ -283,7 +283,7 @@
 
     });
 
-    $(window).load(function(){
+    $(window).on('load', function(){
       setTimeout(function() {
         $("text.c3-title").each(function() {
           useTitleAsHtml($(this));
