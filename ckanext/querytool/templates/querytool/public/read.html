@@ -251,16 +251,20 @@
     <h3>{{ _('Share') }}</h3>
     <div class="row">
       <div class="col-md-6">
-        <div class="input-append">
-          <input class="span4" id="appendedInputButtons" type="text" value="">
-          <button class="btn copyToClipboard" type="button">{{ _('Copy') }}</button>
-        </div>
+          <ul class="list-inline pull-left">
+            <li>
+              <input class=" form-control" id="appendedInputButtons" type="text" value="">
+            </li>
+            <li>
+              <button class="btn btn-default  copyToClipboard" type="button">{{ _('Copy') }}</button>
+            </li>
+          </ul>         
       </div>
       <div class="col-md-6">
         <ul class="list-inline pull-right">
           <li>
             <div class="btn-group">
-              <button class="btn"
+              <button class="btn btn-default"
                 href="#embed-{{ querytools[0].name }}"
                 data-module="tool-embed"
                 data-module-id="{{ querytools[0].id }}">
