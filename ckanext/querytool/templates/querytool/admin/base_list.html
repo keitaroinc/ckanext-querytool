@@ -27,16 +27,22 @@
 
 
 {% block primary_content_inner %}
-  <legend>{{ _('Main') }}</legend>
+
+{% if data %}
   {% for querytool in data %}
     {% if querytool.type == 'main' %}
+    <legend>{{ _('Main') }}</legend>
       {% snippet 'querytool/admin/snippets/query_tools.html', querytool=querytool %}
     {% endif %}
-  {% endfor%}
-  <legend>{{ _('Related') }}</legend>
-  {% for querytool in data %}
+
     {% if querytool.type == 'related' %}
-      {% snippet 'querytool/admin/snippets/query_tools.html', querytool=querytool %}
-    {% endif %}
+    <legend>{{ _('Related') }}</legend>
+    {% snippet 'querytool/admin/snippets/query_tools.html', querytool=querytool %}
+  {% endif %}
   {% endfor%}
+{% else %}
+<div class="alert alert-danger">
+    <strong>{{ _('There are no query tools created') }}</strong>
+ </div>
+{% endif %}
 {% endblock %}
