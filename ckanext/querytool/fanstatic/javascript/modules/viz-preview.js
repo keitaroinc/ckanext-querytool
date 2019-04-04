@@ -44,7 +44,7 @@ ckan.module('querytool-viz-preview', function() {
             var api_ver = 3;
             var base_url = ckan.sandbox().client.endpoint;
             var url = base_url + '/api/' + api_ver + '/action/' + action;
-            return $.post(url, JSON.stringify(data), 'json');
+            return $.post(url, data, 'json');
         }
     };
 
@@ -124,7 +124,6 @@ ckan.module('querytool-viz-preview', function() {
                     value: chart_filter_value
                 }
             }
-
             api.post('querytool_get_chart_data', {
                     category: category,
                     sql_string: sql,
@@ -200,7 +199,7 @@ ckan.module('querytool-viz-preview', function() {
                        this.el.text(this._('Chart could not be created.'));
                     }
                 }.bind(this))
-                .error(function(error) {
+                .fail(function(error) {
                     this.el.text(this._('Chart could not be created.'));
                 }.bind(this));
         },
