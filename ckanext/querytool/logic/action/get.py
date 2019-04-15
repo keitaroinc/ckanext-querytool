@@ -15,11 +15,14 @@ log = logging.getLogger(__name__)
 
 
 def _get_context():
+    displayPrivate  = h.allow_private_datasets()
     return {
         'model': m,
         'session': m.Session,
         'user': c.user or c.author,
-        'auth_user_obj': c.userobj
+        'auth_user_obj': c.userobj,
+        'ignore_auth': displayPrivate,
+        'with_private': displayPrivate
     }
 
 

@@ -31,11 +31,13 @@ parse_params = logic.parse_params
 
 
 def _get_context():
+    displayPrivate  = helpers.allow_private_datasets()
     context = {'model': model,
                'session': model.Session,
                'user': c.user,
                'for_view': True,
-               'with_private': False}
+               'with_private': displayPrivate
+            }
 
     return context
 
