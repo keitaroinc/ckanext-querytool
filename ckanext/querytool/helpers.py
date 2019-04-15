@@ -21,17 +21,22 @@ from ckan.plugins.toolkit import _
 log = logging.getLogger(__name__)
 
 
-def _get_context():
-    return {
+def __get_context():
+    show_private = allow_private_datasets()
+    context = {
         'model': m,
         'session': m.Session,
         'user': c.user or c.author,
-        'auth_user_obj': c.userobj
+        'auth_user_obj': c.userobj,
+        'ignore_auth': show_private,
+        'with_private': show_private
     }
+    return context
 
 
-def _get_action(action, data_dict):
-    return toolkit.get_action(action)(_get_context(), data_dict)
+def __get_action(action, data_dict):
+    context = __get_context()
+    return toolkit.get_action(action)(context, data_dict)
 
 
 def _get_functions(module_root, functions={}):
@@ -80,18 +85,26 @@ def user_is_registered(context):
 
 def get_all_datasets():
     '''
-    Get all public datasets
+    Get all datasets
     :return:
     '''
-    datasets = _get_action('package_list', {})
-
+    action = 'package_list'
+    show_private = allow_private_datasets()
+    if show_private == True:
+        action = 'current_package_list_with_resources'
+    datasets = __get_action(action, {})
+    all_datasets = []
+    if show_private == True: 
+        for name in datasets:
+            all_datasets.append(name['name'])
+        return all_datasets
     return datasets
 
 
 def get_filter_values(resource_id, filter_name, previous_filters=[]):
     '''Returns resource field values with no duplicates.'''
 
-    resource = _get_action('resource_show', {'id': resource_id})
+    resource = __get_action('resource_show', {'id': resource_id})
 
     if not resource.get('datastore_active'):
         return []
@@ -100,7 +113,7 @@ def get_filter_values(resource_id, filter_name, previous_filters=[]):
         'resource_id': resource['id'],
         'limit': 0
     }
-    result = _get_action('datastore_search', data)
+    result = __get_action('datastore_search', data)
 
     where_clause = _create_where_clause(previous_filters)
 
@@ -116,7 +129,7 @@ def get_filter_values(resource_id, filter_name, previous_filters=[]):
             where=where_clause
         )
 
-        result = _get_action('datastore_search_sql', {'sql': sql_string})
+        result = __get_action('datastore_search_sql', {'sql': sql_string})
         values = [field[filter_name] for field in result.get('records', [])]
 
     return sorted(values)
@@ -331,7 +344,7 @@ def get_dataset_resources(dataset_name):
     if dataset_name:
 
         try:
-            dataset = _get_action('package_show', {'id': dataset_name})
+            dataset = __get_action('package_show', {'id': dataset_name})
         except Exception:
             return dataset_resources
 
@@ -403,7 +416,7 @@ def get_geojson_resources():
         'query': 'format:geojson',
         'order_by': 'name',
     }
-    result = _get_action('resource_search', data)
+    result = __get_action('resource_search', data)
     return [{'text': r['name'], 'value': r['url']}
             for r in result.get('results', [])]
 
@@ -482,9 +495,7 @@ def get_map_data(geojson_url, map_key_field, data_key_field,
 @functools32.lru_cache(maxsize=128)
 def get_resource_data(sql_string):
 
-    response = toolkit.get_action('datastore_search_sql')(
-        {}, {'sql': sql_string}
-    )
+    response = __get_action('datastore_search_sql', {'sql': sql_string})
     records_to_lower = []
     for record in response['records']:
         records_to_lower.append({k.lower(): v for k, v in record.items()})
@@ -600,3 +611,22 @@ def get_dataset_url_path(url):
     if len(parts) == 1:
         return ''
     return '/dataset%s' % parts[1]
+
+def __str_to_bool(s):
+    '''
+    Convert string to boolean, since the key is String
+    '''
+    if s == 'True':
+         return True
+    elif s == 'False':
+         return False
+    else:
+         raise ValueError
+
+def allow_private_datasets():
+    '''
+    Get config var to enable or disable visualization of the private datasets
+    :return: True or False
+    '''
+    areAllowed = config.get('ckanext.querytool.allow_private_datasets', default=False)
+    return __str_to_bool(areAllowed)
