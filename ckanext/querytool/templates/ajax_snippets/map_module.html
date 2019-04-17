@@ -1,4 +1,6 @@
-<div id="map_module_{{ n }}" class="item-content" data-module="querytool-map"
+{% set csv_to_map = h.querytool_use_csv_for_map %}
+{% if csv_to_map == true %}
+<div id="map_csv_module_{{ n }}" class="item-content" data-module="querytool-map-csv"
      data-module-map_config="{{ map_config }}"
      data-module-map_resource="{{ map_resource }}"
      data-module-map_title_field="{{ map_title_field }}"
@@ -12,3 +14,13 @@
      data-module-filter_value="{{ filter_value }}">
      Loading...
 </div>
+{% else %}
+<div id="map_module_{{ n }}" class="item-content" data-module="querytool-map"
+     data-module-map_config="{{ map_config }}"
+     data-module-map_resource="{{ map_resource }}"
+     data-module-map_title_field="{{ map_title_field }}"
+     data-module-map_key_field="{{ map_key_field }}"
+     data-module-map_color_scheme="{{ map_color_scheme }}">
+     Loading...
+</div>
+{% endif %}

@@ -1,4 +1,7 @@
 {% import 'macros/form.html' as form %}
+{% set y_axis_values = y_axis_values.split(',') %}
+{% set main_filters = main_filters.split(',') %}
+{% set columns = h.querytool_get_resource_columns(chart_resource, y_axis_values) %}
 
 {% if map and map.filter_name %}
   {% set class = '' %}
@@ -12,9 +15,9 @@
   {% set resources = h.querytool_get_geojson_resources() %}
 
   <div class="form-group">
-    <label class="control-label col-sm-4" for="map_resource_{{ n }}">{{ _('Map resource') }}</label>
+    <label class="control-label col-sm-4" for="map_csv_resource_{{ n }}">{{ _('Map resource') }}</label>
     <div class="col-sm-8">
-      <select id="map_resource_{{ n }}" name="map_resource_{{ n }}" required=required class="form-control">
+      <select id="map_csv_resource_{{ n }}" name="map_csv_resource_{{ n }}" required=required class="form-control">
       <option value="">&mdash; {{ _('Select map resource') }} &mdash;</option>
       {% for resource in resources %}
         {% set isSelected = map and h.querytool_get_dataset_url_path(map.map_resource) == h.querytool_get_dataset_url_path(resource.value) %}
@@ -58,6 +61,18 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="map_data_key_field_{{ n }}">{{ _('Data key field') }}</label>
+    <div class="col-sm-8">
+      <select id="map_data_key_field_{{ n }}" name="map_data_key_field_{{ n }}" required=required class="form-control">
+        <option value="">&mdash; {{ _('Select data key field') }} &mdash;</option>
+        {% for column in columns %}
+        <option value="{{column}}"{% if map %}{{ 'selected' if column == map.data_key_field }}{% endif %}>{{column}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
   {% set color_schemes = h.querytool_get_map_color_scheme() %}
   <div class="form-group">
     <label class="control-label col-sm-4" for="map_color_scheme_{{ n }}">{{ _('Color scheme') }}</label>
@@ -68,6 +83,55 @@
             <option value="{{ color.value }}" {% if map %}{{ 'selected' if color.value == map.map_color_scheme }}{% endif %}>{{ color.text }}</option>
           {% endfor %}
           </optgroup>
+      </select>
+    </div>
+  </div>
+
+  {% for item in y_axis_values %}
+    {% do main_filters.append(item) %}
+  {% endfor %}
+
+  {% set map_filters = h.querytool_get_resource_columns(chart_resource, main_filters) %}
+
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="map_field_filter_name_{{ n }}">{{ _('Optional Filter') }}</label>
+    <div class="col-sm-8">
+      <select id="map_field_filter_name_{{ n }}" name="map_field_filter_name_{{ n }}" class="form-control">
+        <option value="">&mdash; {{ _('Select column') }} &mdash;</option>
+        {% for filter in map_filters %}
+        <option value="{{filter}}"{% if map %}{{ 'selected' if filter == map.filter_name }}{% endif %}>{{filter}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div id="map_div_filter_value_{{ n }}" class="form-group  {{ class }}">
+    <label class="control-label col-sm-4" for="map_field_filter_value_{{ n }}">{{ _('Default value') }}</label>
+    <div class="col-sm-8">
+      <select id="map_field_filter_value_{{ n }}" name="map_field_filter_value_{{ n }}" class="form-control">
+        <option value="">&mdash; {{ _('Select value') }} &mdash;</option>
+        {% if map and map.filter_value %}
+        <option value="{{ map.filter_value }}" selected>{{ map.filter_value }}</option>
+        {% endif %}
+      </select>
+    </div>
+  </div>
+
+  <div id="map_div_filter_alias_{{ n }}" class="form-group {{ class }}">
+    <label class="control-label col-sm-4" for="map_field_filter_alias_{{ n }}">{{ _('Filter Label') }}</label>
+    <div class="col-sm-8">
+      <input id="map_field_filter_alias_{{ n }}" name="map_field_filter_alias_{{ n }}"
+           {% if map and map.filter_alias %}value="{{map.filter_alias}}"{% else %}value=""{% endif %}
+           placeholder="{{ _('Enter filter label') }}" type="text">
+    </div>
+  </div>
+
+  <div id="map_div_filter_visibility_{{ n }}" class="form-group  {{ class }}">
+    <label class="control-label col-sm-4" for="map_field_filter_visibility_{{ n }}">{{ _('Filter visibility') }}</label>
+    <div class="col-sm-8">
+      <select id="map_field_filter_visibility_{{ n }}" name="map_field_filter_visibility_{{ n }}" class="form-control">
+        <option value="public" {{ 'selected' if map and map.filter_visibility == 'public' }}>{{ _('Public') }}</option>
+        <option value="private" {{ 'selected' if map and map.filter_visibility == 'private' }}>{{ _('Private') }}</option>
       </select>
     </div>
   </div>
@@ -95,7 +159,10 @@
     {% set map_resource=map.map_resource %}
     {% set map_title_field=map.map_title_field %}
     {% set map_key_field=map.map_key_field %}
+    {% set data_key_field=map.data_key_field %}
     {% set map_color_scheme=map.map_color_scheme %}
+    {% set filter_name = map.filter_name %}
+    {% set filter_value = map.filter_value %}
   {% endif %}
   {% set map_config = h.querytool_get_map_config() %}
   {% snippet 'ajax_snippets/map_module.html',
@@ -105,7 +172,12 @@
     map_resource=map_resource,
     map_title_field=map_title_field,
     map_key_field=map_key_field,
-    map_color_scheme=map_color_scheme
+    data_key_field=data_key_field,
+    sql_string=sql_string,
+    map_color_scheme=map_color_scheme,
+    y_axis_column=y_axis_column,
+    filter_name=filter_name,
+    filter_value=filter_value
   %}
 </div>
 </div>

@@ -478,13 +478,13 @@ class QueryToolController(base.BaseController):
 
                     images.append(image)
 
-                if k.startswith('map_resource_'):
+                if k.startswith('map_csv_resource_'):
                     map_item = {}
                     id = k.split('_')[-1]
-                    map_item['type'] = 'map'
+                    map_item['type'] = 'csv_map'
                     map_item['order'] = int(id)
                     map_item['map_resource'] = \
-                        data['map_resource_{}'.format(id)]
+                        data['map_csv_resource_{}'.format(id)]
                     map_item['map_title_field'] = \
                         data['map_title_field_{}'.format(id)]
                     map_item['map_key_field'] = \
@@ -510,6 +510,24 @@ class QueryToolController(base.BaseController):
                         map_item['filter_value'] = ''
                         map_item['filter_alias'] = ''
                         map_item['filter_visibility'] = ''
+
+                    maps.append(map_item)
+
+                if k.startswith('map_resource_'):
+                    map_item = {}
+                    id = k.split('_')[-1]
+                    map_item['type'] = 'map'
+                    map_item['order'] = int(id)
+                    map_item['map_resource'] = \
+                        data['map_resource_{}'.format(id)]
+                    map_item['map_title_field'] = \
+                        data['map_title_field_{}'.format(id)]
+                    map_item['map_key_field'] = \
+                        data['map_key_field_{}'.format(id)]
+                    map_item['map_color_scheme'] = \
+                        data['map_color_scheme_{}'.format(id)]
+                    map_item['size'] = \
+                        data['map_size_{}'.format(id)]
 
                     maps.append(map_item)
 

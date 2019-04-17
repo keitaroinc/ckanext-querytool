@@ -6,6 +6,8 @@ import uuid
 import urllib
 import requests
 import functools32
+from distutils.util import strtobool
+
 
 try:
     # CKAN 2.7 and later
@@ -94,7 +96,7 @@ def get_all_datasets():
         action = 'current_package_list_with_resources'
     datasets = __get_action(action, {})
     all_datasets = []
-    if show_private == True: 
+    if show_private == True:
         for name in datasets:
             all_datasets.append(name['name'])
         return all_datasets
@@ -444,6 +446,25 @@ def get_geojson_properties(url):
     return result
 
 
+def get_geojson_map_data(geojson_url, map_key_field):
+    geojson_keys = []
+    # response = urllib.urlopen(geojson_url)
+    resp = requests.get(geojson_url)
+    # geojson_data = json.loads(response.read())
+    geojson_data = resp.json()
+
+    for feature in geojson_data['features']:
+        if feature is not None:
+            geojson_keys.append(feature['properties'][map_key_field])
+
+    map_data = {
+        'geojson_data': geojson_data,
+        'geojson_keys': geojson_keys
+        }
+
+    return map_data
+
+
 def get_map_data(geojson_url, map_key_field, data_key_field,
                  data_value_field, from_where_clause):
 
@@ -612,21 +633,32 @@ def get_dataset_url_path(url):
         return ''
     return '/dataset%s' % parts[1]
 
+
 def __str_to_bool(s):
     '''
     Convert string to boolean, since the key is String
     '''
     if s == 'True':
-         return True
+        return True
     elif s == 'False':
-         return False
+        return False
     else:
-         raise ValueError
+        raise ValueError
+
 
 def allow_private_datasets():
     '''
     Get config var to enable or disable visualization of the private datasets
     :return: True or False
     '''
-    areAllowed = config.get('ckanext.querytool.allow_private_datasets', default=False)
+    areAllowed = config.get('ckanext.querytool.allow_private_datasets', 'False')
     return __str_to_bool(areAllowed)
+
+
+def use_csv_for_map():
+    '''
+    Get config var to enable or disable csv filterin in map visualization
+    :return: True or False
+    '''
+    csv_to_map = config.get('ckanext.querytool.use_csv_for_map', 'False')
+    return __str_to_bool(csv_to_map)

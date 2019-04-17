@@ -367,18 +367,21 @@
                         handleChartOptions();
                     });
             } else if (visualization === 'map') {
+                //Add logic to set between map_item and map_item_csv
+                var template = 'map_item.html'
+                var divMapModule = 'div[data-module=querytool-map]'
 
-                api.getTemplate('map_item.html', {
+                api.getTemplate(template, {
                         n: items,
                         chart_resource: chart_resource,
-                        sql_string: sqlString,
-                        y_axis_column: axisYValue,
-                        y_axis_values: yAxisValues,
+                        //sql_string: sqlString,
+                        //y_axis_column: axisYValue,
+                        //y_axis_values: yAxisValues,
                         main_filters: mainFiltersNames
                     })
                     .done(function(data) {
                         var item = visualizationItems.prepend(data);
-                        ckan.module.initializeElement(item.find('div[data-module=querytool-map]')[0]);
+                        ckan.module.initializeElement(item.find(divMapModule)[0]);
                         handleRenderedVizFilters('map', items);
                         handleItemsOrder();
                     });

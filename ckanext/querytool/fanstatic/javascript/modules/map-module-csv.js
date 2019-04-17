@@ -1,4 +1,4 @@
-ckan.module('querytool-map', function($) {
+ckan.module('querytool-map-csv', function($) {
     'use strict';
 
     var api = {
@@ -24,13 +24,19 @@ ckan.module('querytool-map', function($) {
             this.mapResource = this.el.parent().parent().find('[id*=map_resource_]');
             this.mapTitleField = this.el.parent().parent().find('[id*=map_title_field_]');
             this.mapKeyField = this.el.parent().parent().find('[id*=map_key_field_]');
+            this.dataKeyField = this.el.parent().parent().find('[id*=map_data_key_field_]');
             this.mapColorScheme = this.el.parent().parent().find('[id*=map_color_scheme_]');
+            this.mapFilterName = this.el.parent().parent().find('[id*=map_field_filter_name_]');
+            this.mapFilterValue = this.el.parent().parent().find('[id*=map_field_filter_value_]');
 
             this.valueField = $('#choose_y_axis_column');
             this.mapResource.change(this.onResourceChange.bind(this));
             this.mapTitleField.change(this.onPropertyChange.bind(this));
             this.mapKeyField.change(this.onPropertyChange.bind(this));
+            this.dataKeyField.change(this.onPropertyChange.bind(this));
             this.mapColorScheme.change(this.onPropertyChange.bind(this));
+            this.mapFilterName.change(this.onPropertyChange.bind(this));
+            this.mapFilterValue.change(this.onPropertyChange.bind(this));
 
             $('.leaflet-control-zoom-in').css({
                 'color': '#121e87'
@@ -45,6 +51,8 @@ ckan.module('querytool-map', function($) {
             this.options.map_resource = this.mapResource.val();
             this.options.map_title_field = this.mapTitleField.val();
             this.options.map_key_field = this.mapKeyField.val();
+            this.options.data_key_field = this.dataKeyField.val();
+            this.options.y_axis_column = this.valueField.val();
 
             this.map.eachLayer(function(layer) {
                 if (layer != this.osm) {
@@ -64,6 +72,8 @@ ckan.module('querytool-map', function($) {
 
             this.options.map_title_field = this.mapTitleField.val();
             this.options.map_key_field = this.mapKeyField.val();
+            this.options.data_key_field = this.dataKeyField.val();
+            this.options.y_axis_column = this.valueField.val();
 
             if (this.options.map_resource != this.mapResource.val() && this.mapResource.val() != '') {
                 this.options.map_resource = this.mapResource.val();
@@ -102,9 +112,17 @@ ckan.module('querytool-map', function($) {
             this.options.map_resource = this.mapResource.val();
             this.options.map_title_field = this.mapTitleField.val();
             this.options.map_key_field = this.mapKeyField.val();
+            this.options.data_key_field = this.dataKeyField.val();
+            this.options.y_axis_column = this.valueField.val();
+            this.options.measure_label = $('#choose_y_axis_column option:selected').text();
             this.options.map_color_scheme = this.mapColorScheme.val();
+            this.options.filter_name = this.mapFilterName.val();
+            this.options.filter_value = this.mapFilterValue.val();
 
-            if (this.options.map_title_field && this.options.map_key_field && this.options.map_resource) {
+
+            if (this.options.map_title_field && this.options.map_key_field &&
+                this.options.data_key_field && this.options.map_resource &&
+                this.options.y_axis_column) {
 
                 if (this.legend) {
                     this.map.removeControl(this.legend);
@@ -239,17 +257,31 @@ ckan.module('querytool-map', function($) {
                 shadowSize: [41, 41]
             });
 
+            var parsedSqlString = this.options.sql_string.split('*');
+            var sqlStringExceptSelect = parsedSqlString[1];
+            // We need to encode some characters, eg, '+' sign:
+            sqlStringExceptSelect = sqlStringExceptSelect.replace('+', '%2B');
+            var filter_name = (this.options.filter_name === true) ? '' : this.options.filter_name;
+            var filter_value = (this.options.filter_value === true) ? '' : this.options.filter_value;
 
-            api.post('querytool_get_geojson_map_data', {
+            // If additional map filter is set extend the current sql with the new filter
+            if (filter_name && filter_value) {
+                var filterSql = ' AND ("' + this.options.filter_name + '"' + " = '" + this.options.filter_value + "')"
+                sqlStringExceptSelect = sqlStringExceptSelect + filterSql;
+            }
+
+            api.post('querytool_get_map_data', {
                     geojson_url: mapURL,
-                    map_key_field: this.options.map_key_field
+                    map_key_field: this.options.map_key_field,
+                    data_key_field: this.options.data_key_field,
+                    data_value_field: this.options.y_axis_column,
+                    sql_string: sqlStringExceptSelect
 
                 })
                 .done(function(data) {
                     if (data.success) {
                         var geoJSON = data.result['geojson_data'];
-                        this.featuresValues = data.result['geojson_keys'];
-
+                        this.featuresValues = data.result['features_values'];
 
 
 //                      Workaround for generating color if data for only one region
@@ -275,7 +307,7 @@ ckan.module('querytool-map', function($) {
                         this.geoL = L.geoJSON(geoJSON, {
                             style: function(feature) {
 
-                                var elementData = feature.properties[this.options.map_key_field],
+                                var elementData = this.featuresValues[feature.properties[this.options.map_key_field]],
                                     value = elementData && elementData.value,
                                     color = (value) ? scale(value) : '#737373';
 
@@ -294,20 +326,20 @@ ckan.module('querytool-map', function($) {
                                 });
                             },
                             onEachFeature: function(feature, layer) {
-                                var elementData = feature.properties[this.options.map_key_field];
-                                console.log(elementData);
+                                var elementData = this.featuresValues[feature.properties[this.options.map_key_field]];
+
                                 if (elementData) {
 
                                     layer.on({
                                         mouseover: function highlightFeature(e) {
                                             var layer = e.target;
 
-                                            // layer.setStyle({
-                                            //     weight: 3,
-                                            //     color: '#737373',
-                                            //     dashArray: '3',
-                                            //     fillOpacity: 0.7
-                                            // });
+                                            layer.setStyle({
+                                                weight: 3,
+                                                color: '#737373',
+                                                dashArray: '3',
+                                                fillOpacity: 0.7
+                                            });
 
                                             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                                                 layer.bringToFront();
@@ -321,7 +353,7 @@ ckan.module('querytool-map', function($) {
                                             this.info.update(infoData);
                                         }.bind(this),
                                         mouseout: function resetHighlight(e) {
-                                            //this.geoL.resetStyle(e.target);
+                                            this.geoL.resetStyle(e.target);
                                             this.info.update();
                                         }.bind(this)
                                     });

@@ -59,6 +59,7 @@
   <fieldset id="visualization-settings-items" class="visualizations">
     {% set measure = h.querytool_pick_first_by_attr_value(data.y_axis_columns, 'name', data.y_axis_column, default={}) %}
     {% set measure_label = measure.alias or measure.name %}
+    {% set csv_to_map = h.querytool_use_csv_for_map %}
     {% for item in data.visualizations %}
       {% if item.type == 'chart'  %}
         {% snippet 'ajax_snippets/chart_item.html',
@@ -86,17 +87,24 @@
         %}
       {% endif %}
       {% if item.type == 'map'  %}
-        {% snippet 'ajax_snippets/map_item.html',
-          n = item.order,
-          map = item,
-          sql_string = data.sql_string,
-          chart_resource = data.chart_resource,
-          y_axis_column = data.y_axis_column,
-          measure_label = measure_label,
-          map_color_scheme = data.map_color_scheme,
-          y_axis_values = data.y_axis_values,
-          main_filters = data.main_filters_names
-        %}
+        {% if csv_to_map == true %}
+          {% snippet 'ajax_snippets/map_item_csv.html',
+              n = item.order,
+              map = item,
+              sql_string = data.sql_string,
+              chart_resource = data.chart_resource,
+              y_axis_column = data.y_axis_column,
+              measure_label = measure_label,
+              map_color_scheme = data.map_color_scheme,
+              y_axis_values = data.y_axis_values,
+              main_filters = data.main_filters_names
+            %}
+        {% else %}
+          {% snippet 'ajax_snippets/map_item.html',
+              n = item.order,
+              map = item
+          %}
+        {% endif %}
       {% endif %}
      {% if item.type == 'table'  %}
         {% snippet 'ajax_snippets/table_item.html',

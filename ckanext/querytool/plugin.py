@@ -125,6 +125,8 @@ class QuerytoolPlugin(plugins.SingletonPlugin, DefaultTranslation):
                 helpers.get_geojson_resources,
             'querytool_get_geojson_properties':
                 helpers.get_geojson_properties,
+            'querytool_get_geojson_map_data':
+                helpers.get_geojson_map_data,
             'querytool_get_map_color_scheme':
                 helpers.get_map_color_scheme,
             'querytool_get_chart_sort':
@@ -148,7 +150,9 @@ class QuerytoolPlugin(plugins.SingletonPlugin, DefaultTranslation):
             'querytool_dump_json':
                 helpers.dump_json,
             'querytool_get_dataset_url_path':
-                helpers.get_dataset_url_path
+                helpers.get_dataset_url_path,
+            'querytool_use_csv_for_map':
+                helpers.use_csv_for_map
         }
 
     # IAuthFunctions
