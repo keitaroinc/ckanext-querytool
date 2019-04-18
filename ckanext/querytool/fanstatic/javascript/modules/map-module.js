@@ -73,7 +73,7 @@ ckan.module('querytool-map', function($) {
                     })
                     .done(function(data) {
                         if (data.success) {
-
+                            console.log(data.result);
                             this.mapTitleField.find('option').not(':first').remove();
                             this.mapKeyField.find('option').not(':first').remove();
 
@@ -222,7 +222,7 @@ ckan.module('querytool-map', function($) {
             this.info.update = function (infoData) {
                 this._div.innerHTML = '<h4></h4>' +  (infoData ?
                       options.map_title_field + ': ' + '<b>' + infoData.title + '</b><br/>'
-                     + 'type' + ': ' + '<b>' + infoData.type + '</b>' : '');
+                     + 'info' + ': ' + '<b>' + infoData.info + '</b>' : '');
             };
 
             this.info.addTo(this.map);
@@ -250,10 +250,11 @@ ckan.module('querytool-map', function($) {
                         var geoJSON = data.result['geojson_data'];
                         this.featuresValues = data.result['geojson_keys'];
 
-
+                        console.log(this.featuresValues);
 
 //                      Workaround for generating color if data for only one region
                         var valuesKeys = Object.keys(this.featuresValues)
+
                         var valuesLength = valuesKeys.length;
                         var scale;
                         if (valuesLength === 1) {
@@ -314,7 +315,7 @@ ckan.module('querytool-map', function($) {
 
                                             var infoData = {
                                                 title: feature.properties[this.options.map_title_field],
-                                                type: feature.properties['farm_type']
+                                                info: feature.properties[this.options.map_key_field]
                                             };
 
                                             this.info.update(infoData);

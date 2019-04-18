@@ -441,7 +441,7 @@ def get_geojson_properties(url):
     ]
 
     for k, v in geojson.get('features')[0].get('properties').iteritems():
-        if k not in exclude_keys:
+        if k not in exclude_keys and v is not None:
             result.append({'value': k, 'text': k})
     return result
 
