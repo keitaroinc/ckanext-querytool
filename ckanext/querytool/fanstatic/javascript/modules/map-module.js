@@ -220,7 +220,6 @@ ckan.module('querytool-map', function($) {
 
             // method that we will use to update the control based on feature properties passed
             this.info.update = function (infoData) {
-                console.log(infoData);
                 this._div.innerHTML = '<h4></h4>' +  (infoData ?
                       options.map_title_field + ': ' + '<b>' + infoData.title + '</b><br/>'
                      + 'type' + ': ' + '<b>' + infoData.type + '</b>' : '');
