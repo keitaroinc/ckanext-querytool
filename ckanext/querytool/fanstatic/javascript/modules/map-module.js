@@ -13,7 +13,7 @@ ckan.module('querytool-map', function($) {
             var api_ver = 3;
             var base_url = ckan.sandbox().client.endpoint;
             var url = base_url + '/api/' + api_ver + '/action/' + action;
-            return $.post(url, JSON.stringify(data), 'json');
+            return $.post(url, data, 'json');
         }
     };
 
@@ -220,9 +220,10 @@ ckan.module('querytool-map', function($) {
 
             // method that we will use to update the control based on feature properties passed
             this.info.update = function (infoData) {
+                console.log(infoData);
                 this._div.innerHTML = '<h4></h4>' +  (infoData ?
                       options.map_title_field + ': ' + '<b>' + infoData.title + '</b><br/>'
-                     + options.measure_label + ': ' + '<b>' + infoData.measure + '</b>' : '');
+                     + 'type' + ': ' + '<b>' + infoData.type + '</b>' : '');
             };
 
             this.info.addTo(this.map);
@@ -272,6 +273,7 @@ ckan.module('querytool-map', function($) {
                         // Create the info window
                         this.createInfo.call(this);
 
+
                         this.geoL = L.geoJSON(geoJSON, {
                             style: function(feature) {
 
@@ -289,25 +291,23 @@ ckan.module('querytool-map', function($) {
                                 };
                             }.bind(this),
                             pointToLayer: function(fauture, latlng) {
-                                return L.marker(latlng, {
+                                return L.circleMarker(latlng, {
                                     icon: smallIcon
                                 });
                             },
                             onEachFeature: function(feature, layer) {
                                 var elementData = feature.properties[this.options.map_key_field];
-                                console.log(elementData);
                                 if (elementData) {
 
                                     layer.on({
                                         mouseover: function highlightFeature(e) {
-                                            var layer = e.target;
-
-                                            // layer.setStyle({
-                                            //     weight: 3,
-                                            //     color: '#737373',
-                                            //     dashArray: '3',
-                                            //     fillOpacity: 0.7
-                                            // });
+                                            var mark = e.target;
+                                            mark.setStyle({
+                                                weight: 3,
+                                                color: '#737373',
+                                                dashArray: '3',
+                                                fillOpacity: 0.7
+                                            });
 
                                             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                                                 layer.bringToFront();
@@ -315,21 +315,21 @@ ckan.module('querytool-map', function($) {
 
                                             var infoData = {
                                                 title: feature.properties[this.options.map_title_field],
-                                                measure: this.formatNumber(parseFloat(elementData['value']))
+                                                type: feature.properties['farm_type']
                                             };
 
                                             this.info.update(infoData);
                                         }.bind(this),
                                         mouseout: function resetHighlight(e) {
-                                            //this.geoL.resetStyle(e.target);
+                                            this.geoL.resetStyle(e.target);
                                             this.info.update();
                                         }.bind(this)
                                     });
                                 }
                             }.bind(this)
                         }).addTo(this.map);
-                        // Create the legend
-                        this.createLegend.call(this);
+                        //Create the legend
+                        //this.createLegend.call(this);
                         // Properly zoom the map to fit all markers/polygons
                         this.map.fitBounds(this.geoL.getBounds());
                     } else {

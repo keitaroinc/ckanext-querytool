@@ -368,15 +368,15 @@
                     });
             } else if (visualization === 'map') {
                 //Add logic to set between map_item and map_item_csv
-                var template = 'map_item.html'
-                var divMapModule = 'div[data-module=querytool-map]'
+                var template = 'map_item_csv.html'
+                var divMapModule = 'div[data-module=querytool-map-csv]'
 
                 api.getTemplate(template, {
                         n: items,
                         chart_resource: chart_resource,
-                        //sql_string: sqlString,
-                        //y_axis_column: axisYValue,
-                        //y_axis_values: yAxisValues,
+                        sql_string: sqlString,
+                        y_axis_column: axisYValue,
+                        y_axis_values: yAxisValues,
                         main_filters: mainFiltersNames
                     })
                     .done(function(data) {

@@ -13,7 +13,7 @@ ckan.module('querytool-map-csv', function($) {
             var api_ver = 3;
             var base_url = ckan.sandbox().client.endpoint;
             var url = base_url + '/api/' + api_ver + '/action/' + action;
-            return $.post(url, JSON.stringify(data), 'json');
+            return $.post(url, data, 'json');
         }
     };
 
@@ -21,7 +21,7 @@ ckan.module('querytool-map-csv', function($) {
         initialize: function() {
 
             this.initLeaflet.call(this);
-            this.mapResource = this.el.parent().parent().find('[id*=map_resource_]');
+            this.mapResource = this.el.parent().parent().find('[id*=map_csv_resource_]');
             this.mapTitleField = this.el.parent().parent().find('[id*=map_title_field_]');
             this.mapKeyField = this.el.parent().parent().find('[id*=map_key_field_]');
             this.dataKeyField = this.el.parent().parent().find('[id*=map_data_key_field_]');
@@ -256,7 +256,7 @@ ckan.module('querytool-map-csv', function($) {
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
             });
-
+            console.log(mapURL);
             var parsedSqlString = this.options.sql_string.split('*');
             var sqlStringExceptSelect = parsedSqlString[1];
             // We need to encode some characters, eg, '+' sign:
