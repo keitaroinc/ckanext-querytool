@@ -73,7 +73,6 @@ ckan.module('querytool-map', function($) {
                     })
                     .done(function(data) {
                         if (data.success) {
-                            console.log(data.result);
                             this.mapTitleField.find('option').not(':first').remove();
                             this.mapKeyField.find('option').not(':first').remove();
 
@@ -203,7 +202,8 @@ ckan.module('querytool-map', function($) {
 
                                 var elementData = feature.properties[this.options.map_key_field],
                                     value = elementData && elementData.value,
-                                    color = (value) ? scale(value) : '#737373';
+                                    //this is not working
+                                    color = (value) ? scale(value) : '#3c763d';
 
                                 return {
                                     fillColor: color,
@@ -228,7 +228,7 @@ ckan.module('querytool-map', function($) {
                                             var mark = e.target;
                                             mark.setStyle({
                                                 weight: 3,
-                                                color: '#737373',
+                                                color: '#3c763d',
                                                 dashArray: '3',
                                                 fillOpacity: 0.7
                                             });
