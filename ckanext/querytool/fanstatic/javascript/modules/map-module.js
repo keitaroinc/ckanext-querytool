@@ -104,10 +104,9 @@ ckan.module('querytool-map', function($) {
             this.options.map_key_field = this.mapKeyField.val();
             this.options.map_color_scheme = this.mapColorScheme.val();
 
-            if (this.options.map_title_field && this.options.map_key_field && this.options.map_resource) {
-
-                if (this.legend) {
-                    this.map.removeControl(this.legend);
+            if (this.options.map_title_field && this.options.map_key_field && this.options.map_resource && this.options.map_color_scheme) {
+                if (this.info) {
+                    this.map.removeControl(this.info);
                 }
                 this.map.eachLayer(function(layer) {
                     if (layer != this.osm) {
@@ -150,61 +149,6 @@ ckan.module('querytool-map', function($) {
                 this.initializeMarkers.call(this, mapURL);
             }
 
-        },
-        createScale: function(featuresValues) {
-            var colors = this.options.map_color_scheme.split(',');
-
-            var values = $.map(featuresValues, function(feature, key) {
-                    return feature.value;
-                }).sort(function(a, b) {
-                    return a - b;
-                }),
-                min = values[0],
-                max = values[values.length - 1];
-
-            return d3.scale.quantize()
-                .domain([min, max])
-                .range(colors);
-        },
-        formatNumber: function(num) {
-            return (num % 1 ? num.toFixed(2) : num);
-        },
-        createLegend: function() {
-            var scale = this.createScale(this.featuresValues);
-            var opacity = 1;
-            var noDataLabel = 'No data'
-            this.legend = L.control({
-                position: 'bottomright'
-            });
-
-            this.legend.onAdd = function(map) {
-                var div = L.DomUtil.create('div', 'info'),
-                    ul = L.DomUtil.create('ul', 'legend'),
-                    domain = scale.domain(),
-                    range = scale.range(),
-                    min = domain[0] + 0.0000000001,
-                    max = domain[domain.length - 1],
-                    step = (max - min) / range.length,
-                    grades = $.map(range, function(_, i) {
-                        return (min + step * i);
-                    }),
-                    labels = [];
-
-                div.appendChild(ul);
-                for (var i = 0, len = grades.length; i < len; i++) {
-                    ul.innerHTML +=
-                        '<li><span style="background:' + scale(grades[i]) + '; opacity: ' + opacity + '"></span> ' +
-                        this.formatNumber(grades[i]) +
-                        (grades[i + 1] ? '&ndash;' + this.formatNumber(grades[i + 1]) + '</li>' : '+</li></ul>');
-                }
-                ul.innerHTML +=
-                    '<li><span style="background:' + '#bdbdbd' + '; opacity: ' + opacity + '"></span> ' +
-                    noDataLabel + '</li>';
-
-                return div;
-            }.bind(this);
-
-            this.legend.addTo(this.map);
         },
         createInfo: function() {
             var options = this.options;
@@ -249,26 +193,6 @@ ckan.module('querytool-map', function($) {
                     if (data.success) {
                         var geoJSON = data.result['geojson_data'];
                         this.featuresValues = data.result['geojson_keys'];
-
-                        console.log(this.featuresValues);
-
-//                      Workaround for generating color if data for only one region
-                        var valuesKeys = Object.keys(this.featuresValues)
-
-                        var valuesLength = valuesKeys.length;
-                        var scale;
-                        if (valuesLength === 1) {
-
-                            scale = function (value) {
-                                if (value == this.featuresValues[valuesKeys[0]].value) {
-                                    var colors = this.options.map_color_scheme.split(',');
-                                    return colors[colors.length -1];
-                                }
-                            }.bind(this)
-
-                        } else {
-                            scale = this.createScale(this.featuresValues);
-                        }
 //                      -----------------------------------------------------------------
                         // Create the info window
                         this.createInfo.call(this);
