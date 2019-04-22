@@ -368,8 +368,12 @@
                     });
             } else if (visualization === 'map') {
                 //Add logic to set between map_item and map_item_csv
-                var template = 'map_item.html'
-                var divMapModule = 'div[data-module=querytool-map]'
+                var template = 'map_item.html';
+                var divMapModule = 'div[data-module=querytool-map]';
+                if (createVisualization.attr("data-csv-map") == true) {
+                    template = 'map_item_csv.html';
+                    divMapModule = 'div[data-module=querytool-map-csv]';
+                }
 
                 api.getTemplate(template, {
                         n: items,
