@@ -40,8 +40,11 @@ ckan.module('querytool-map', function($) {
             });
             this.sandbox.subscribe('querytool:updateMaps', this.onPropertyChange.bind(this));
         },
-        resetMap: function() {
+        // filterMap: function (mapKeyField) {
+        //     this.mapKeyField.find('option').not(':first').remove();
 
+        // },
+        resetMap: function() {
             this.options.map_resource = this.mapResource.val();
             this.options.map_title_field = this.mapTitleField.val();
             this.options.map_key_field = this.mapKeyField.val();
@@ -80,9 +83,9 @@ ckan.module('querytool-map', function($) {
                                 this.mapTitleField.append(new Option(elem.text, elem.value));
                             }.bind(this));
 
-                            $.each(data.result, function(idx, elem) {
-                                this.mapKeyField.append(new Option(elem.text, elem.value));
-                            }.bind(this));
+                            // $.each(data.result, function(idx, elem) {
+                            //     this.mapKeyField.append(new Option(elem.text, elem.value));
+                            // }.bind(this));
 
                             this.resetMap.call(this);
                         } else {
@@ -103,23 +106,32 @@ ckan.module('querytool-map', function($) {
             this.options.map_key_field = this.mapKeyField.val();
             this.options.map_color_scheme = this.mapColorScheme.val();
 
-            if (this.options.map_title_field && this.options.map_key_field && this.options.map_resource && this.options.map_color_scheme) {
-                if (this.info) {
-                    this.map.removeControl(this.info);
+            if (this.info) {
+                this.map.removeControl(this.info);
+            }
+            this.map.eachLayer(function(layer) {
+                if (layer != this.osm) {
+                    this.map.removeLayer(layer);
                 }
-                this.map.eachLayer(function(layer) {
-                    if (layer != this.osm) {
-                        this.map.removeLayer(layer);
-                    }
-                }.bind(this));
-                this.initializeMarkers.call(this, this.options.map_resource);
-            } else {
+            }.bind(this));
+
+            if (this.options.map_title_field  && this.options.map_resource && this.options.map_color_scheme && !this.options.map_key_field) {
+                console.log("KK");
+                this.mapKeyField.find('option').not('selected').remove();
+
+                this.initializeMarkers.call(this, this.options.map_resource, this.options.map_title_field);
+            }
+            if (this.options.map_key_field){
+                this.initializeMarkers.call(this, this.options.map_resource, this.options.map_title_field, this.options.map_key_field);
+            }else{
                 this.resetMap.call(this);
             }
         },
         initLeaflet: function() {
             // geo layer
             var mapURL = (this.options.map_resource === true) ? '' : this.options.map_resource;
+            var map_title_field = (this.options.map_title_field === true) ? '' : this.options.map_title_field;
+            var map_key_field = (this.options.map_key_field === true) ? '' : this.options.map_key_field;
 
             var elementId = this.el[0].id;
             var lat = 39;
@@ -142,10 +154,9 @@ ckan.module('querytool-map', function($) {
             });
 
             this.map.addLayer(this.osm);
-
             if (mapURL) {
                 // Initialize markers
-                this.initializeMarkers.call(this, mapURL);
+                this.initializeMarkers.call(this, mapURL, map_title_field, map_key_field);
             }
 
         },
@@ -170,8 +181,7 @@ ckan.module('querytool-map', function($) {
 
             this.info.addTo(this.map);
         },
-        initializeMarkers: function(mapURL) {
-
+        initializeMarkers: function(mapURL, map_title_field, map_key_field) {
             var smallIcon = L.icon({
                 iconUrl: '/base/images/marker-icon.png',
                 shadowUrl: '/base/images/marker-shadow.png',
@@ -181,18 +191,22 @@ ckan.module('querytool-map', function($) {
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
             });
-
-
             api.post('querytool_get_geojson_map_data', {
                     geojson_url: mapURL,
-                    map_key_field: this.options.map_key_field
+                    map_title_field: map_title_field,
+                    map_key_field: map_key_field
 
                 })
                 .done(function(data) {
                     if (data.success) {
                         var geoJSON = data.result['geojson_data'];
                         this.featuresValues = data.result['geojson_keys'];
-//                      -----------------------------------------------------------------
+                        this.mapKeyField.find('option').not(':eq(0), :selected').remove();
+
+                        $.each(this.featuresValues, function(item, value){
+                            this.mapKeyField.append(new Option(value));
+                        }.bind(this));
+                        //                      -----------------------------------------------------------------
                         // Create the info window
                         this.createInfo.call(this);
 
@@ -220,7 +234,7 @@ ckan.module('querytool-map', function($) {
                                 });
                             },
                             onEachFeature: function(feature, layer) {
-                                var elementData = feature.properties[this.options.map_key_field];
+                                var elementData = feature.properties[this.options.map_title_field];
                                 if (elementData) {
 
                                     layer.on({
@@ -239,7 +253,7 @@ ckan.module('querytool-map', function($) {
 
                                             var infoData = {
                                                 title: feature.properties[this.options.map_title_field],
-                                                info: feature.properties[this.options.map_key_field]
+                                                info: feature.properties[this.options.map_title_field]
                                             };
 
                                             this.info.update(infoData);

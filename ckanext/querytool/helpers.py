@@ -446,20 +446,27 @@ def get_geojson_properties(url):
     return result
 
 
-def get_geojson_map_data(geojson_url, map_key_field):
-    geojson_keys = []
+def get_geojson_map_data(geojson_url, map_title_field, map_key_field):
+    geojson_keys = set()
     # response = urllib.urlopen(geojson_url)
     resp = requests.get(geojson_url)
     # geojson_data = json.loads(response.read())
     geojson_data = resp.json()
-
-    for feature in geojson_data['features']:
-        if feature is not None:
-            geojson_keys.append(feature['properties'][map_key_field])
+    if map_title_field:
+        for feature in geojson_data['features']:
+            if feature is not None:
+                geojson_keys.add(feature['properties'][map_title_field])
+    if map_key_field:
+        filtered_data = []
+        features = geojson_data.pop('features')
+        for feature in features:
+            if feature['properties'][map_title_field] == map_key_field:
+                filtered_data.append(feature)
+        geojson_data['features'] = filtered_data
 
     map_data = {
         'geojson_data': geojson_data,
-        'geojson_keys': geojson_keys
+        'geojson_keys': list(geojson_keys)
         }
 
     return map_data
