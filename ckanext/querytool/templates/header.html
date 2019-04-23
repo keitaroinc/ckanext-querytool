@@ -43,19 +43,6 @@
         {% block header_site_search %}
         {{ super() }}
         {% endblock %}
-        {% block vitalst_header_site_navigation %}
-        <nav class="section navigation default-menu">
-            <ul class="nav nav-pills">
-                {% block header_site_navigation_ckan %}
-                  {{ h.build_nav_main(
-                    ('organizations_index', _('Organizations')),
-                    ('group_index', _('Groups')),
-                    ('about', _('About'))
-                  ) }}
-              {% endblock %}
-            </ul>
-        </nav>
-        {% endblock %}
       </div>
    </div>
 </header>
