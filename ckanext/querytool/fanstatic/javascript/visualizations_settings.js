@@ -370,7 +370,7 @@
                 //Add logic to set between map_item and map_item_csv
                 var template = 'map_item.html';
                 var divMapModule = 'div[data-module=querytool-map]';
-                if (createVisualization.attr("data-csv-map") == true) {
+                if (createVisualization.attr("data-csv-map") === 'True') {
                     template = 'map_item_csv.html';
                     divMapModule = 'div[data-module=querytool-map-csv]';
                 }

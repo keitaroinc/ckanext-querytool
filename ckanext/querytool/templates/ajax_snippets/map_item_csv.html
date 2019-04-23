@@ -51,7 +51,7 @@
     <label class="control-label col-sm-4" for="map_key_field_{{ n }}">{{ _('Map key field') }}</label>
     <div class="col-sm-8">
       <select id="map_key_field_{{ n }}" name="map_key_field_{{ n }}" required=required class="form-control">
-      <option value={{map.map_key_field}}>&mdash; {{ _('Select map key field') }} &mdash;</option>
+      <option value="">&mdash; {{ _('Select map key field') }} &mdash;</option>
       {% if map_properties %}
         {% for property in map_properties %}
           <option value="{{ property.value }}" {% if map %}{{ 'selected' if property.value == map.map_key_field }}{% endif %} >{{property.text}}</option>
