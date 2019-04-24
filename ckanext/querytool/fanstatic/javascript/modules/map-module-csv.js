@@ -38,6 +38,7 @@ ckan.module('querytool-map-csv', function($) {
             this.mapFilterName.change(this.onPropertyChange.bind(this));
             this.mapFilterValue.change(this.onPropertyChange.bind(this));
 
+
             $('.leaflet-control-zoom-in').css({
                 'color': '#121e87'
             });
@@ -127,6 +128,11 @@ ckan.module('querytool-map-csv', function($) {
                 if (this.legend) {
                     this.map.removeControl(this.legend);
                 }
+
+                if (this.info) {
+                    this.map.removeControl(this.info);
+                }
+
                 this.map.eachLayer(function(layer) {
                     if (layer != this.osm) {
                         this.map.removeLayer(layer);
@@ -140,7 +146,6 @@ ckan.module('querytool-map-csv', function($) {
         initLeaflet: function() {
             // geo layer
             var mapURL = (this.options.map_resource === true) ? '' : this.options.map_resource;
-
             var elementId = this.el[0].id;
             var lat = 39;
             var lng = 40;
@@ -256,7 +261,6 @@ ckan.module('querytool-map-csv', function($) {
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
             });
-            console.log(mapURL);
             var parsedSqlString = this.options.sql_string.split('*');
             var sqlStringExceptSelect = parsedSqlString[1];
             // We need to encode some characters, eg, '+' sign:

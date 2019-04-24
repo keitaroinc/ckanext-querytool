@@ -481,7 +481,7 @@ class QueryToolController(base.BaseController):
                 if k.startswith('map_csv_resource_'):
                     map_item = {}
                     id = k.split('_')[-1]
-                    map_item['type'] = 'csv_map'
+                    map_item['type'] = 'map'
                     map_item['order'] = int(id)
                     map_item['map_resource'] = \
                         data['map_csv_resource_{}'.format(id)]

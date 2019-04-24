@@ -23,7 +23,7 @@
                     async: false
                 });
             }
-            return $.post(url, JSON.stringify(data), 'json');
+            return $.post(url, data, 'json');
         },
         getTemplate: function(filename, params, success, error) {
 
@@ -446,9 +446,11 @@
         function handleItemsOrder() {
             // var items = $('.chart_field');
             var items = $('.item');
+
             $.each(items, function(i, item) {
 
                 item = $(item);
+                console.log(item);
                 var order = i + 1;
                 if (item[0].id.indexOf('chart_field') >= 0) {
                     var dropdownGraphType = item.find('[id*=chart_field_graph_]');
@@ -677,7 +679,34 @@
                     selectMapFilterVisibility.attr('name', 'map_field_filter_visibility_' + order);
                     selectMapFilterVisibilityDiv.attr('id', 'map_div_filter_visibility_' + order);
 
-                } else if (item[0].id.indexOf('table_item') >= 0) {
+                }
+                else if (item[0].id.indexOf('map_csv_item') >= 0) {
+                    var map_resource_url = item.find('[id*=map_csv_resource_]');
+                    var map_title_field = item.find('[id*=map_title_field_]');
+                    var map_key_field = item.find('[id*=map_key_field_]');
+                    var map_color_scheme = item.find('[id*=map_color_scheme_]');
+                    var map_size = item.find('[id*=map_size_]');
+                    var map_module = item.find('[id*=map_module_]');
+
+
+
+                    item.attr('id', 'map_csv_item_' + order);
+                    map_resource_url.attr('id', 'map_csv_resource_' + order);
+                    map_resource_url.attr('name', 'map_csv_resource_' + order);
+                    map_title_field.attr('id', 'map_title_field_' + order);
+                    map_title_field.attr('name', 'map_title_field_' + order);
+                    map_key_field.attr('id', 'map_key_field_' + order);
+                    map_key_field.attr('name', 'map_key_field_' + order);
+
+                    map_color_scheme.attr('id', 'map_color_scheme_' + order);
+                    map_color_scheme.attr('name', 'map_color_scheme_' + order);
+                    map_size.attr('id', 'map_size_' + order);
+                    map_size.attr('name', 'map_size_' + order);
+                    map_module.attr('id', 'map_module_' + order);
+
+
+                }
+                else if (item[0].id.indexOf('table_item') >= 0) {
                     var table_size = item.find('[id*=table_size_]');
                     var table_data_format = item.find('[id*=table_data_format_]');
                     var table_main_value = item.find('[id*=table_main_value_]');

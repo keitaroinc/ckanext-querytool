@@ -87,7 +87,7 @@
         %}
       {% endif %}
       {% if item.type == 'map'  %}
-        {% if csv_to_map == true %}
+        {% if csv_to_map%}
           {% snippet 'ajax_snippets/map_item_csv.html',
               n = item.order,
               map = item,
