@@ -1,20 +1,15 @@
 {% ckan_extends %}
-      <div class="nav-collapse collapse">
-        {% block header_site_navigation %}
-        <nav class="section navigation">
-            <ul class="nav nav-pills">
-            {% block header_site_navigation_tabs %}
-              {% if h.organizations_available('read')|length > 0 %}
-                  {{ h.build_nav_main(
-                    ('querytool_groups', _('Design Applications')),
-                    ('querytool_public', _('Use Applications'))
-                  )}}
-              {% endif %}
-              {% endblock %}
-            </ul>
-        </nav>
-        {% endblock %}
-        {% block header_site_search %}
-        {{ super() }}
-        {% endblock %}
-      </div>
+{{ super() }}
+{% block header_site_navigation_tabs %}
+   {{ h.build_nav_main(
+      ('home', _('Home'))
+   )}}
+   {% if h.organizations_available('read')|length > 0 %}
+      {{ h.build_nav_main(
+         ('search', _('Load Datasets')),
+         ('querytool_groups', _('Design Applications')),
+         ('querytool_public', _('Use Applications'))
+      )}}
+   {% endif %}
+{% endblock %}
+
